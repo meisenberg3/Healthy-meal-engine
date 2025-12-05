@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Healthy Meal Engine: turn your grocery budget into a realistic, healthy meal plan and grocery list built for busy workers and budget-focused eaters." />
 
-  <!-- Fonts -->
+  <!-- Friendlier rounded font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- PDF support -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
@@ -27,20 +27,18 @@
       --muted: #6b7280;
       --danger: #dc2626;
       --border-subtle: #e5e7eb;
-      --shadow-soft: 0 16px 40px rgba(15, 23, 42, 0.12);
-      --radius-lg: 18px;
+      --shadow-soft: 0 18px 42px rgba(15, 23, 42, 0.12);
+      --radius-lg: 22px;
       --radius-pill: 999px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #e5f9ee 0, #f9fafb 40%, #f3f4f6 100%);
+      font-family: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #e5f9ee 0, #f9fafb 38%, #e5e7eb 100%);
       color: var(--text);
       display: flex;
       justify-content: center;
@@ -51,7 +49,7 @@
       width: 100%;
       max-width: 1120px;
       background: var(--bg-soft);
-      border-radius: 26px;
+      border-radius: 28px;
       padding: 20px 20px 24px;
       box-shadow: var(--shadow-soft);
       border: 1px solid #e5e7eb;
@@ -59,46 +57,45 @@
 
     header {
       display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
       gap: 18px;
       align-items: center;
       margin-bottom: 18px;
     }
 
     @media (max-width: 850px) {
-      header {
-        grid-template-columns: minmax(0, 1fr);
-      }
+      header { grid-template-columns: minmax(0, 1fr); }
     }
 
     .brand-lockup {
       display: flex;
       gap: 12px;
       align-items: flex-start;
+      margin-bottom: 8px;
     }
 
     .brand-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 16px;
+      width: 48px;
+      height: 48px;
+      border-radius: 18px;
       background: conic-gradient(from 210deg, #22c55e, #a3e635, #4ade80, #22c55e);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 12px 28px rgba(34, 197, 94, 0.4);
+      box-shadow: 0 14px 30px rgba(34, 197, 94, 0.4);
       flex-shrink: 0;
     }
 
     .brand-icon span {
       font-weight: 800;
-      font-size: 22px;
+      font-size: 24px;
       color: #052e16;
     }
 
     .brand-text h1 {
       margin: 0;
       font-size: 22px;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
     }
 
     .brand-text p {
@@ -111,12 +108,11 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 10px;
     }
 
     .chip {
       border-radius: var(--radius-pill);
-      padding: 6px 10px;
+      padding: 7px 12px;
       font-size: 11px;
       border: 1px solid #e5e7eb;
       background: #ffffff;
@@ -133,30 +129,26 @@
       background: #22c55e;
     }
 
-    .chip.secondary .chip-dot {
-      background: #6366f1;
-    }
+    .chip.secondary .chip-dot { background: #6366f1; }
 
     .chip-label-strong {
-      font-weight: 600;
+      font-weight: 700;
       color: #111827;
     }
 
     .hero-visual {
-      background: #ecfdf5;
-      border-radius: 20px;
-      padding: 10px;
+      background: radial-gradient(circle at top left, #bbf7d0 0, #ecfdf5 48%, #e0f2fe 100%);
+      border-radius: 22px;
+      padding: 10px 12px 12px;
       display: grid;
-      grid-template-columns: 1.2fr 1fr;
+      grid-template-columns: 1.1fr 1fr;
       gap: 8px;
       align-items: center;
       border: 1px solid #bbf7d0;
     }
 
     @media (max-width: 850px) {
-      .hero-visual {
-        grid-template-columns: minmax(0, 1fr);
-      }
+      .hero-visual { grid-template-columns: minmax(0, 1fr); }
     }
 
     .hero-text {
@@ -165,7 +157,8 @@
     }
 
     .hero-text strong {
-      font-weight: 700;
+      font-weight: 800;
+      font-size: 13px;
     }
 
     .hero-badges {
@@ -177,11 +170,16 @@
 
     .hero-badge {
       font-size: 11px;
-      padding: 4px 8px;
+      padding: 4px 9px;
       border-radius: 999px;
       background: #bbf7d0;
       color: #064e3b;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
+
+    .hero-badge span.icon { font-size: 13px; }
 
     .hero-images {
       display: grid;
@@ -190,7 +188,7 @@
     }
 
     .hero-img {
-      border-radius: 12px;
+      border-radius: 14px;
       overflow: hidden;
       border: 1px solid #86efac;
       height: 70px;
@@ -200,33 +198,33 @@
 
     .hero-img.main {
       grid-column: 1 / -1;
-      height: 80px;
+      height: 82px;
     }
 
     /* Layout */
     .layout {
       display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.4fr);
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.4fr);
       gap: 18px;
       align-items: flex-start;
     }
 
     @media (max-width: 880px) {
-      .layout {
-        grid-template-columns: minmax(0, 1fr);
-      }
+      .layout { grid-template-columns: minmax(0, 1fr); }
     }
 
     .panel {
-      border-radius: 18px;
+      border-radius: 22px;
       padding: 16px 16px 18px;
       background: #ffffff;
       border: 1px solid var(--border-subtle);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
     }
 
     .panel h2 {
       margin: 0 0 8px;
       font-size: 16px;
+      letter-spacing: 0.01em;
     }
 
     .panel-subtitle {
@@ -235,67 +233,103 @@
       color: var(--muted);
     }
 
+    /* Step styling to break the “Google Form” feel */
+    .step-block {
+      background: #f9fafb;
+      border-radius: 18px;
+      padding: 10px 10px 12px;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 10px;
+    }
+
+    .step-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #166534;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .step-label span.badge-num {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #22c55e;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #ecfdf5;
+      font-size: 11px;
+    }
+
     .form-grid {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
-      gap: 12px;
+      gap: 8px;
     }
 
     .form-row {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
     }
 
     label {
       font-size: 13px;
       color: #111827;
+      font-weight: 600;
     }
 
     label span.hint {
       font-size: 11px;
       color: var(--muted);
+      font-weight: 500;
     }
 
     input[type="number"],
     input[type="text"],
     select,
     textarea {
-      border-radius: 12px;
+      border-radius: 14px;
       border: 1px solid var(--border-subtle);
-      background: #f9fafb;
+      background: #ffffff;
       color: var(--text);
       font-size: 13px;
-      padding: 7px 10px;
+      padding: 8px 11px;
       outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, transform 0.08s ease;
       resize: vertical;
     }
 
     input::placeholder,
     textarea::placeholder {
       color: #9ca3af;
+      font-weight: 500;
     }
 
     input:focus,
     select:focus,
     textarea:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.35);
-      background: #ffffff;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.3), 0 8px 18px rgba(34, 197, 94, 0.15);
+      background: #f9fffb;
+      transform: translateY(-1px);
     }
 
-    select {
-      cursor: pointer;
-    }
+    select { cursor: pointer; }
 
     .persona-toggle {
       display: flex;
       gap: 6px;
       border-radius: 999px;
       padding: 4px;
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
+      background: #e5f7ec;
+      border: 1px solid #bbf7d0;
     }
 
     .persona-option {
@@ -310,13 +344,14 @@
       overflow: hidden;
       text-overflow: ellipsis;
       background: transparent;
+      font-weight: 600;
+      color: #166534;
     }
 
     .persona-option.active {
       background: #22c55e;
       border-color: #16a34a;
       color: #f0fdf4;
-      font-weight: 600;
       box-shadow: 0 8px 20px rgba(22, 163, 74, 0.35);
     }
 
@@ -341,11 +376,13 @@
       background: #ffffff;
       color: var(--muted);
       cursor: pointer;
+      font-weight: 600;
     }
 
     .preset-chip:hover {
       border-color: var(--accent);
       color: #15803d;
+      background: #ecfdf3;
     }
 
     .controls-row {
@@ -360,7 +397,7 @@
     .ghost-btn {
       border-radius: var(--radius-pill);
       font-size: 13px;
-      padding: 8px 14px;
+      padding: 8px 16px;
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -372,8 +409,8 @@
     .primary-btn {
       background: linear-gradient(120deg, var(--accent), var(--accent-strong));
       color: #f0fdf4;
-      font-weight: 600;
-      box-shadow: 0 10px 24px rgba(22, 163, 74, 0.35);
+      font-weight: 700;
+      box-shadow: 0 12px 26px rgba(22, 163, 74, 0.32);
     }
 
     .primary-btn:disabled {
@@ -386,18 +423,17 @@
       background: #ffffff;
       color: var(--muted);
       border: 1px solid #e5e7eb;
+      font-weight: 600;
     }
 
-    .ghost-btn span.icon {
-      font-size: 14px;
-    }
+    .ghost-btn span.icon { font-size: 14px; }
 
     .tiny-status {
       font-size: 11px;
       color: var(--muted);
     }
 
-    /* Results + cards */
+    /* RESULTS */
     #results {
       display: flex;
       flex-direction: column;
@@ -430,14 +466,8 @@
       gap: 6px;
     }
 
-    .pill-label {
-      color: #4b5563;
-    }
-
-    .pill-value {
-      font-weight: 600;
-      color: #166534;
-    }
+    .pill-label { color: #4b5563; }
+    .pill-value { font-weight: 700; color: #166534; }
 
     .pill-badge {
       font-size: 11px;
@@ -446,6 +476,7 @@
       border: 1px solid #bbf7d0;
       background: #dcfce7;
       color: #166534;
+      font-weight: 600;
     }
 
     .pill-badge.over {
@@ -462,7 +493,7 @@
 
     .day-card {
       margin-top: 4px;
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 10px 10px 12px;
       background: #f9fafb;
       border: 1px solid #e5e7eb;
@@ -477,7 +508,7 @@
 
     .day-title {
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .day-cost {
@@ -492,7 +523,7 @@
     }
 
     .meal-pill {
-      border-radius: 12px;
+      border-radius: 13px;
       padding: 7px 8px;
       background: #ffffff;
       border: 1px solid #e5e7eb;
@@ -522,6 +553,7 @@
       background: #f3f4f6;
       border: 1px solid #e5e7eb;
       color: #6b7280;
+      font-weight: 600;
     }
 
     .tag.busy {
@@ -550,7 +582,7 @@
 
     .grocery-card {
       margin-top: 4px;
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 10px 10px 12px;
       background: #f9fafb;
       border: 1px solid #e5e7eb;
@@ -565,7 +597,7 @@
 
     .grocery-title {
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .grocery-meta {
@@ -583,7 +615,7 @@
 
     .grocery-item {
       padding: 4px 6px;
-      border-radius: 9px;
+      border-radius: 10px;
       background: #ffffff;
       border: 1px dashed #e5e7eb;
       display: flex;
@@ -591,13 +623,8 @@
       gap: 6px;
     }
 
-    .grocery-name {
-      color: #111827;
-    }
-
-    .grocery-uses {
-      color: var(--muted);
-    }
+    .grocery-name { color: #111827; }
+    .grocery-uses { color: var(--muted); }
 
     .results-empty {
       margin-top: 6px;
@@ -626,16 +653,15 @@
       text-decoration: none;
     }
 
-    footer a:hover {
-      text-decoration: underline;
-    }
+    footer a:hover { text-decoration: underline; }
 
     @media (max-width: 640px) {
       .app-shell {
         padding: 16px 14px 20px;
-        border-radius: 18px;
+        border-radius: 20px;
         box-shadow: none;
       }
+      .step-block { padding: 9px 9px 11px; }
     }
   </style>
 </head>
@@ -673,9 +699,9 @@
           <strong>Eat better on a real person budget.</strong><br />
           No calorie math, no diet culture — just practical meals and a grocery list that match your time, money, and cravings.
           <div class="hero-badges">
-            <span class="hero-badge">🥗 3 meals + snacks</span>
-            <span class="hero-badge">🛒 Grocery list included</span>
-            <span class="hero-badge">💸 Budget-aware picks</span>
+            <span class="hero-badge"><span class="icon">🥗</span>3 meals + snacks</span>
+            <span class="hero-badge"><span class="icon">🛒</span>Grocery list included</span>
+            <span class="hero-badge"><span class="icon">💸</span>Budget-aware picks</span>
           </div>
         </div>
         <div class="hero-images">
@@ -694,77 +720,99 @@
           Tell the engine how you actually live. We’ll return meals and a grocery list that match your budget and energy.
         </p>
 
-        <div class="form-grid">
-          <div class="form-row">
-            <label for="persona">
-              Focus mode
-              <span class="hint">Quick & easy vs ultra-cheap.</span>
-            </label>
-            <div class="persona-toggle" id="personaToggle">
-              <button type="button" class="persona-option active" data-persona="busy">
-                Busy Worker
-              </button>
-              <button type="button" class="persona-option" data-persona="budget">
-                Budget-First
-              </button>
-            </div>
-            <p class="persona-note" id="personaNote">
-              Busy Worker: prioritizes quick-prep or ready-to-eat meals that still hit the health bar.
-            </p>
+        <div class="step-block">
+          <div class="step-label">
+            <span class="badge-num">1</span>
+            Who are we feeding & for how long?
           </div>
-
-          <div class="form-row">
-            <label>
-              Budget & duration
-              <span class="hint">Be honest so the math works.</span>
-            </label>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <div style="flex:1; min-width:120px;">
-                <input type="number" id="totalBudget" placeholder="Total budget ($)" min="10" />
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="persona">
+                Focus mode
+                <span class="hint">Quick & easy vs ultra-cheap.</span>
+              </label>
+              <div class="persona-toggle" id="personaToggle">
+                <button type="button" class="persona-option active" data-persona="busy">
+                  Busy Worker
+                </button>
+                <button type="button" class="persona-option" data-persona="budget">
+                  Budget-First
+                </button>
               </div>
-              <div style="width:120px;">
-                <input type="number" id="numDays" placeholder="# days" min="1" max="10" />
+              <p class="persona-note" id="personaNote">
+                Busy Worker: prioritizes quick-prep or ready-to-eat meals that still hit the health bar.
+              </p>
+            </div>
+
+            <div class="form-row">
+              <label>
+                Budget & duration
+                <span class="hint">Be honest so the math works.</span>
+              </label>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <div style="flex:1; min-width:120px;">
+                  <input type="number" id="totalBudget" placeholder="Total budget ($)" min="10" />
+                </div>
+                <div style="width:120px;">
+                  <input type="number" id="numDays" placeholder="# days" min="1" max="10" />
+                </div>
+              </div>
+              <div class="preset-row">
+                <button type="button" class="preset-chip" data-budget="75" data-days="5">
+                  Solo • 5 days • ~$75
+                </button>
+                <button type="button" class="preset-chip" data-budget="100" data-days="7">
+                  Solo • 7 days • ~$100
+                </button>
+                <button type="button" class="preset-chip" data-budget="150" data-days="7">
+                  2 people • 7 days • ~$150
+                </button>
               </div>
             </div>
-            <div class="preset-row">
-              <button type="button" class="preset-chip" data-budget="75" data-days="5">
-                Solo • 5 days • ~$75
-              </button>
-              <button type="button" class="preset-chip" data-budget="100" data-days="7">
-                Solo • 7 days • ~$100
-              </button>
-              <button type="button" class="preset-chip" data-budget="150" data-days="7">
-                2 people • 7 days • ~$150
-              </button>
+          </div>
+        </div>
+
+        <div class="step-block">
+          <div class="step-label">
+            <span class="badge-num">2</span>
+            How do you like to eat?
+          </div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="dietPreference">
+                Eating style
+                <span class="hint">We’ll only show meals that fit.</span>
+              </label>
+              <select id="dietPreference">
+                <option value="omnivore">Omnivore (no major restrictions)</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="high-protein">High-protein, low junk</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <label for="dislikes">
+                Hard no ingredients
+                <span class="hint">Comma-separated. e.g. “peanut butter, tuna, mushrooms”.</span>
+              </label>
+              <input type="text" id="dislikes" placeholder="List anything you refuse to eat…" />
             </div>
           </div>
+        </div>
 
-          <div class="form-row">
-            <label for="dietPreference">
-              Eating style
-              <span class="hint">We’ll only show meals that fit.</span>
-            </label>
-            <select id="dietPreference">
-              <option value="omnivore">Omnivore (no major restrictions)</option>
-              <option value="vegetarian">Vegetarian</option>
-              <option value="high-protein">High-protein, low junk</option>
-            </select>
+        <div class="step-block">
+          <div class="step-label">
+            <span class="badge-num">3</span>
+            Real-life constraints (optional)
           </div>
-
-          <div class="form-row">
-            <label for="dislikes">
-              Hard no ingredients
-              <span class="hint">Comma-separated. e.g. “peanut butter, tuna, mushrooms”.</span>
-            </label>
-            <input type="text" id="dislikes" placeholder="List anything you refuse to eat…" />
-          </div>
-
-          <div class="form-row">
-            <label for="constraints">
-              Lifestyle constraints (optional)
-              <span class="hint">Short notes like “no oven”, “office microwave only”, “gym 3x nights”.</span>
-            </label>
-            <textarea id="constraints" rows="2" placeholder="Add context so the plan feels like your real life."></textarea>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="constraints">
+                Lifestyle constraints
+                <span class="hint">Short notes like “no oven”, “office microwave only”, “gym 3x nights”.</span>
+              </label>
+              <textarea id="constraints" rows="2" placeholder="Add context so the plan feels like your real life."></textarea>
+            </div>
           </div>
         </div>
 
@@ -806,7 +854,7 @@
     </div>
 
     <footer>
-      <span>Healthy Meal Engine · v1.2 – Light theme, Busy Worker & Budget-First edition</span>
+      <span>Healthy Meal Engine · v1.3 – Light, “not a Google Form” edition</span>
       <span>Tip: Once you like a plan, download the PDF or paste the list into Notes before shopping.</span>
     </footer>
   </div>
@@ -817,290 +865,100 @@
      ***********************/
     const MEALS = [
       // BREAKFAST
-      {
-        category: "Breakfast",
-        name: "Greek yogurt + berries + granola",
-        diet: ["omnivore", "high-protein", "vegetarian"],
-        tags: ["busy", "budget", "protein", "quick"],
-        prepMinutes: 3,
-        costPerServing: 2.4,
-        ingredients: [
-          "Greek yogurt (tub)",
-          "Frozen berry mix",
-          "Low-sugar granola"
-        ]
-      },
-      {
-        category: "Breakfast",
-        name: "Overnight oats with chia & banana",
-        diet: ["omnivore", "high-protein", "vegetarian"],
-        tags: ["busy", "budget", "quick"],
-        prepMinutes: 5,
-        costPerServing: 1.5,
-        ingredients: [
-          "Rolled oats",
-          "Chia seeds",
-          "Bananas",
-          "Cinnamon",
-          "Oat or almond milk"
-        ]
-      },
-      {
-        category: "Breakfast",
-        name: "Egg muffin cups (batch cook)",
-        diet: ["omnivore", "high-protein"],
-        tags: ["budget", "protein"],
-        prepMinutes: 20,
-        costPerServing: 1.8,
-        ingredients: [
-          "Eggs",
-          "Spinach",
-          "Bell peppers",
-          "Shredded cheese"
-        ]
-      },
-      {
-        category: "Breakfast",
-        name: "Protein smoothie (frozen fruit + protein powder)",
-        diet: ["omnivore", "high-protein", "vegetarian"],
-        tags: ["busy", "protein", "quick"],
-        prepMinutes: 4,
-        costPerServing: 2.2,
-        ingredients: [
-          "Protein powder",
-          "Frozen fruit",
-          "Spinach",
-          "Milk or water"
-        ]
-      },
+      { category:"Breakfast", name:"Greek yogurt + berries + granola",
+        diet:["omnivore","high-protein","vegetarian"],
+        tags:["busy","budget","protein","quick"], prepMinutes:3, costPerServing:2.4,
+        ingredients:["Greek yogurt (tub)","Frozen berry mix","Low-sugar granola"] },
+      { category:"Breakfast", name:"Overnight oats with chia & banana",
+        diet:["omnivore","high-protein","vegetarian"],
+        tags:["busy","budget","quick"], prepMinutes:5, costPerServing:1.5,
+        ingredients:["Rolled oats","Chia seeds","Bananas","Cinnamon","Oat or almond milk"] },
+      { category:"Breakfast", name:"Egg muffin cups (batch cook)",
+        diet:["omnivore","high-protein"],
+        tags:["budget","protein"], prepMinutes:20, costPerServing:1.8,
+        ingredients:["Eggs","Spinach","Bell peppers","Shredded cheese"] },
+      { category:"Breakfast", name:"Protein smoothie (frozen fruit + protein powder)",
+        diet:["omnivore","high-protein","vegetarian"],
+        tags:["busy","protein","quick"], prepMinutes:4, costPerServing:2.2,
+        ingredients:["Protein powder","Frozen fruit","Spinach","Milk or water"] },
 
       // LUNCH
-      {
-        category: "Lunch",
-        name: "Chicken, rice & broccoli meal-prep bowls",
-        diet: ["omnivore", "high-protein"],
-        tags: ["budget", "protein"],
-        prepMinutes: 30,
-        costPerServing: 3.2,
-        ingredients: [
-          "Chicken breast",
-          "Brown rice",
-          "Frozen broccoli",
-          "Olive oil",
-          "Garlic powder"
-        ]
-      },
-      {
-        category: "Lunch",
-        name: "Tuna salad on whole grain toast",
-        diet: ["omnivore", "high-protein"],
-        tags: ["budget", "protein"],
-        prepMinutes: 8,
-        costPerServing: 2.0,
-        ingredients: [
-          "Canned tuna",
-          "Greek yogurt or light mayo",
-          "Whole grain bread",
-          "Pickles or celery"
-        ]
-      },
-      {
-        category: "Lunch",
-        name: "Hummus, veggie & feta wrap",
-        diet: ["vegetarian", "omnivore"],
-        tags: ["busy", "quick"],
-        prepMinutes: 7,
-        costPerServing: 2.5,
-        ingredients: [
-          "Whole wheat tortilla",
-          "Hummus",
-          "Cucumber",
-          "Carrots",
-          "Feta cheese"
-        ]
-      },
-      {
-        category: "Lunch",
-        name: "Microwave-friendly frozen veggie + protein bowl",
-        diet: ["omnivore", "high-protein"],
-        tags: ["busy", "quick"],
-        prepMinutes: 6,
-        costPerServing: 3.8,
-        ingredients: [
-          "Frozen grain & veggie bowl",
-          "Rotisserie chicken (optional)"
-        ]
-      },
+      { category:"Lunch", name:"Chicken, rice & broccoli meal-prep bowls",
+        diet:["omnivore","high-protein"],
+        tags:["budget","protein"], prepMinutes:30, costPerServing:3.2,
+        ingredients:["Chicken breast","Brown rice","Frozen broccoli","Olive oil","Garlic powder"] },
+      { category:"Lunch", name:"Tuna salad on whole grain toast",
+        diet:["omnivore","high-protein"],
+        tags:["budget","protein"], prepMinutes:8, costPerServing:2.0,
+        ingredients:["Canned tuna","Greek yogurt or light mayo","Whole grain bread","Pickles or celery"] },
+      { category:"Lunch", name:"Hummus, veggie & feta wrap",
+        diet:["vegetarian","omnivore"],
+        tags:["busy","quick"], prepMinutes:7, costPerServing:2.5,
+        ingredients:["Whole wheat tortilla","Hummus","Cucumber","Carrots","Feta cheese"] },
+      { category:"Lunch", name:"Microwave-friendly frozen veggie + protein bowl",
+        diet:["omnivore","high-protein"],
+        tags:["busy","quick"], prepMinutes:6, costPerServing:3.8,
+        ingredients:["Frozen grain & veggie bowl","Rotisserie chicken (optional)"] },
 
       // DINNER
-      {
-        category: "Dinner",
-        name: "Sheet pan chicken, potatoes & carrots",
-        diet: ["omnivore", "high-protein"],
-        tags: ["budget", "protein"],
-        prepMinutes: 15,
-        costPerServing: 3.0,
-        ingredients: [
-          "Chicken thighs",
-          "Baby potatoes",
-          "Carrots",
-          "Olive oil",
-          "Seasoning blend"
-        ]
-      },
-      {
-        category: "Dinner",
-        name: "One-pot lentil & veggie stew",
-        diet: ["vegetarian", "omnivore"],
-        tags: ["budget"],
-        prepMinutes: 15,
-        costPerServing: 1.9,
-        ingredients: [
-          "Dry lentils",
-          "Onion",
-          "Carrots",
-          "Celery",
-          "Canned tomatoes",
-          "Veggie broth"
-        ]
-      },
-      {
-        category: "Dinner",
-        name: "Stir-fry (frozen veggies + chicken + rice)",
-        diet: ["omnivore", "high-protein"],
-        tags: ["busy", "protein"],
-        prepMinutes: 15,
-        costPerServing: 3.1,
-        ingredients: [
-          "Frozen stir-fry veggies",
-          "Chicken breast or tofu",
-          "Rice",
-          "Soy sauce or stir-fry sauce"
-        ]
-      },
-      {
-        category: "Dinner",
-        name: "Baked salmon, rice & green beans",
-        diet: ["omnivore", "high-protein"],
-        tags: ["protein"],
-        prepMinutes: 12,
-        costPerServing: 4.2,
-        ingredients: [
-          "Frozen salmon fillets",
-          "Rice",
-          "Frozen green beans",
-          "Lemon",
-          "Olive oil"
-        ]
-      },
+      { category:"Dinner", name:"Sheet pan chicken, potatoes & carrots",
+        diet:["omnivore","high-protein"],
+        tags:["budget","protein"], prepMinutes:15, costPerServing:3.0,
+        ingredients:["Chicken thighs","Baby potatoes","Carrots","Olive oil","Seasoning blend"] },
+      { category:"Dinner", name:"One-pot lentil & veggie stew",
+        diet:["vegetarian","omnivore"],
+        tags:["budget"], prepMinutes:15, costPerServing:1.9,
+        ingredients:["Dry lentils","Onion","Carrots","Celery","Canned tomatoes","Veggie broth"] },
+      { category:"Dinner", name:"Stir-fry (frozen veggies + chicken + rice)",
+        diet:["omnivore","high-protein"],
+        tags:["busy","protein"], prepMinutes:15, costPerServing:3.1,
+        ingredients:["Frozen stir-fry veggies","Chicken breast or tofu","Rice","Soy sauce or stir-fry sauce"] },
+      { category:"Dinner", name:"Baked salmon, rice & green beans",
+        diet:["omnivore","high-protein"],
+        tags:["protein"], prepMinutes:12, costPerServing:4.2,
+        ingredients:["Frozen salmon fillets","Rice","Frozen green beans","Lemon","Olive oil"] },
 
       // SNACKS
-      {
-        category: "Snacks",
-        name: "Carrots & hummus",
-        diet: ["omnivore", "vegetarian", "high-protein"],
-        tags: ["busy", "budget", "quick"],
-        prepMinutes: 2,
-        costPerServing: 0.9,
-        ingredients: [
-          "Baby carrots",
-          "Hummus"
-        ]
-      },
-      {
-        category: "Snacks",
-        name: "Apple + peanut butter",
-        diet: ["omnivore", "vegetarian"],
-        tags: ["budget", "quick"],
-        prepMinutes: 2,
-        costPerServing: 1.0,
-        ingredients: [
-          "Apples",
-          "Peanut butter"
-        ]
-      },
-      {
-        category: "Snacks",
-        name: "Hard-boiled eggs",
-        diet: ["omnivore", "high-protein"],
-        tags: ["budget", "protein"],
-        prepMinutes: 10,
-        costPerServing: 0.7,
-        ingredients: [
-          "Eggs",
-          "Salt & pepper"
-        ]
-      },
-      {
-        category: "Snacks",
-        name: "Low-sugar protein bar",
-        diet: ["omnivore", "vegetarian", "high-protein"],
-        tags: ["busy", "quick", "protein"],
-        prepMinutes: 1,
-        costPerServing: 1.5,
-        ingredients: [
-          "Box of low-sugar protein bars"
-        ]
-      },
+      { category:"Snacks", name:"Carrots & hummus",
+        diet:["omnivore","vegetarian","high-protein"],
+        tags:["busy","budget","quick"], prepMinutes:2, costPerServing:0.9,
+        ingredients:["Baby carrots","Hummus"] },
+      { category:"Snacks", name:"Apple + peanut butter",
+        diet:["omnivore","vegetarian"],
+        tags:["budget","quick"], prepMinutes:2, costPerServing:1.0,
+        ingredients:["Apples","Peanut butter"] },
+      { category:"Snacks", name:"Hard-boiled eggs",
+        diet:["omnivore","high-protein"],
+        tags:["budget","protein"], prepMinutes:10, costPerServing:0.7,
+        ingredients:["Eggs","Salt & pepper"] },
+      { category:"Snacks", name:"Low-sugar protein bar",
+        diet:["omnivore","vegetarian","high-protein"],
+        tags:["busy","quick","protein"], prepMinutes:1, costPerServing:1.5,
+        ingredients:["Box of low-sugar protein bars"] },
 
       // BEVERAGES
-      {
-        category: "Beverages",
-        name: "Water + flavor drops or lemon",
-        diet: ["omnivore", "vegetarian", "high-protein"],
-        tags: ["budget", "quick"],
-        prepMinutes: 1,
-        costPerServing: 0.1,
-        ingredients: [
-          "Water",
-          "Lemon",
-          "Zero-sugar flavor drops (optional)"
-        ]
-      },
-      {
-        category: "Beverages",
-        name: "Cold brew coffee (home batch)",
-        diet: ["omnivore", "vegetarian", "high-protein"],
-        tags: ["budget", "busy"],
-        prepMinutes: 10,
-        costPerServing: 0.8,
-        ingredients: [
-          "Ground coffee",
-          "Filtered water",
-          "Milk or creamer (optional)"
-        ]
-      },
-      {
-        category: "Beverages",
-        name: "Green tea",
-        diet: ["omnivore", "vegetarian", "high-protein"],
-        tags: ["budget", "quick"],
-        prepMinutes: 3,
-        costPerServing: 0.4,
-        ingredients: [
-          "Green tea bags"
-        ]
-      },
-      {
-        category: "Beverages",
-        name: "Electrolyte powder in water",
-        diet: ["omnivore", "vegetarian", "high-protein"],
-        tags: ["busy", "quick"],
-        prepMinutes: 1,
-        costPerServing: 0.7,
-        ingredients: [
-          "Electrolyte powder",
-          "Water"
-        ]
-      }
+      { category:"Beverages", name:"Water + flavor drops or lemon",
+        diet:["omnivore","vegetarian","high-protein"],
+        tags:["budget","quick"], prepMinutes:1, costPerServing:0.1,
+        ingredients:["Water","Lemon","Zero-sugar flavor drops (optional)"] },
+      { category:"Beverages", name:"Cold brew coffee (home batch)",
+        diet:["omnivore","vegetarian","high-protein"],
+        tags:["budget","busy"], prepMinutes:10, costPerServing:0.8,
+        ingredients:["Ground coffee","Filtered water","Milk or creamer (optional)"] },
+      { category:"Beverages", name:"Green tea",
+        diet:["omnivore","vegetarian","high-protein"],
+        tags:["budget","quick"], prepMinutes:3, costPerServing:0.4,
+        ingredients:["Green tea bags"] },
+      { category:"Beverages", name:"Electrolyte powder in water",
+        diet:["omnivore","vegetarian","high-protein"],
+        tags:["busy","quick"], prepMinutes:1, costPerServing:0.7,
+        ingredients:["Electrolyte powder","Water"] }
     ];
 
-    const CATEGORIES = ["Breakfast", "Lunch", "Dinner", "Snacks", "Beverages"];
+    const CATEGORIES = ["Breakfast","Lunch","Dinner","Snacks","Beverages"];
     const SETTINGS_KEY = "hme_settings_v1";
 
-    /***********************
-     * STATE + ELEMENTS    *
-     ***********************/
+    /* ELEMENTS & STATE */
     const personaToggle = document.getElementById("personaToggle");
     const personaNote = document.getElementById("personaNote");
     const totalBudgetInput = document.getElementById("totalBudget");
@@ -1119,9 +977,6 @@
     let currentPlanSnapshot = null;
     let currentPersona = "busy";
 
-    /***********************
-     * SETTINGS STORAGE    *
-     ***********************/
     function loadSettings() {
       try {
         const raw = localStorage.getItem(SETTINGS_KEY);
@@ -1139,24 +994,12 @@
               : "Budget-First: nudges the engine toward lower-cost meals, even if prep takes a bit longer.";
         }
 
-        if (typeof s.totalBudget === "number") {
-          totalBudgetInput.value = s.totalBudget;
-        }
-        if (typeof s.numDays === "number") {
-          numDaysInput.value = s.numDays;
-        }
-        if (s.dietPreference) {
-          dietPreferenceSelect.value = s.dietPreference;
-        }
-        if (s.dislikes) {
-          dislikesInput.value = s.dislikes;
-        }
-        if (s.constraints) {
-          constraintsInput.value = s.constraints;
-        }
-      } catch (e) {
-        console.warn("Could not load saved settings", e);
-      }
+        if (typeof s.totalBudget === "number") totalBudgetInput.value = s.totalBudget;
+        if (typeof s.numDays === "number") numDaysInput.value = s.numDays;
+        if (s.dietPreference) dietPreferenceSelect.value = s.dietPreference;
+        if (s.dislikes) dislikesInput.value = s.dislikes;
+        if (s.constraints) constraintsInput.value = s.constraints;
+      } catch (e) { console.warn("Could not load settings", e); }
     }
 
     function saveSettings(payload) {
@@ -1172,22 +1015,15 @@
             constraints: payload.constraints
           })
         );
-      } catch (e) {
-        console.warn("Could not save settings", e);
-      }
+      } catch (e) { console.warn("Could not save settings", e); }
     }
 
-    /***********************
-     * UI HANDLERS         *
-     ***********************/
     personaToggle.addEventListener("click", (e) => {
       const btn = e.target.closest(".persona-option");
       if (!btn) return;
-
       document.querySelectorAll(".persona-option").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       currentPersona = btn.dataset.persona;
-
       personaNote.textContent =
         currentPersona === "busy"
           ? "Busy Worker: prioritizes quick-prep or ready-to-eat meals that still hit the health bar."
@@ -1264,7 +1100,6 @@
 
     downloadBtn.addEventListener("click", async () => {
       if (!currentPlanSnapshot) return;
-
       downloadBtn.disabled = true;
       downloadBtn.textContent = "Building PDF…";
       statusText.textContent = "Converting your plan to a printable PDF…";
@@ -1274,9 +1109,7 @@
         const doc = new jsPDF("p", "pt", "a4");
 
         await doc.html(resultsPanel, {
-          callback: function (doc) {
-            doc.save("Healthy-Meal-Plan.pdf");
-          },
+          callback: function (doc) { doc.save("Healthy-Meal-Plan.pdf"); },
           margin: [24, 24, 24, 24],
           autoPaging: "text",
           html2canvas: { scale: 0.7, useCORS: true }
@@ -1294,33 +1127,24 @@
 
     copyGroceriesBtn.addEventListener("click", () => {
       if (!currentPlanSnapshot) return;
-
       const lines = [];
       lines.push("Grocery list from Healthy Meal Engine");
       lines.push("");
       currentPlanSnapshot.groceryItems.forEach(item => {
         lines.push(`- ${item.name} (${item.uses}x, approx. $${roundTo(item.estCost)})`);
       });
-
       const text = lines.join("\n");
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard
           .writeText(text)
-          .then(() => {
-            statusText.textContent = "Grocery list copied. Paste into Notes or Reminders.";
-          })
-          .catch(() => {
-            alert("Grocery list copied (or mostly copied). If it didn’t work, long-press and select manually.");
-          });
+          .then(() => { statusText.textContent = "Grocery list copied. Paste into Notes or Reminders."; })
+          .catch(() => { alert("Grocery list copied (or mostly copied). If it didn’t work, long-press and select manually."); });
       } else {
         alert("Grocery list copied (or mostly copied). If it didn’t work, long-press and select manually.");
       }
     });
 
-    /***********************
-     * CORE ENGINE         *
-     ***********************/
     function showError(message) {
       errorBox.textContent = message;
       errorBox.style.display = "block";
@@ -1332,9 +1156,7 @@
         if (!meal.diet.includes(dietPreference)) return false;
         if (dislikes.length) {
           const ingredientsJoined = meal.ingredients.join(" ").toLowerCase();
-          if (dislikes.some(d => d && ingredientsJoined.includes(d))) {
-            return false;
-          }
+          if (dislikes.some(d => d && ingredientsJoined.includes(d))) return false;
         }
         return true;
       });
@@ -1342,15 +1164,11 @@
 
     function pickMealForCategory(catalog, category, persona) {
       const filtered = catalog.filter(m => m.category === category);
-      if (filtered.length === 0) return null;
-
+      if (!filtered.length) return null;
       const sorted = [...filtered].sort((a, b) => {
-        if (persona === "busy") {
-          return a.prepMinutes - b.prepMinutes;
-        }
+        if (persona === "busy") return a.prepMinutes - b.prepMinutes;
         return a.costPerServing - b.costPerServing;
       });
-
       const maxIndex = Math.min(sorted.length - 1, 2);
       const pickIndex = Math.floor(Math.random() * (maxIndex + 1));
       return sorted[pickIndex];
@@ -1369,7 +1187,6 @@
         CATEGORIES.forEach(cat => {
           const meal = pickMealForCategory(catalog, cat, persona);
           if (!meal) return;
-
           dayMeals.push(meal);
           dayCost += meal.costPerServing;
           estimatedTotalCost += meal.costPerServing;
@@ -1388,10 +1205,7 @@
         days.push({ dayIndex: day, meals: dayMeals, dayCost: roundTo(dayCost) });
       }
 
-      const groceryItems = Array.from(groceryMap.values()).sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
-
+      const groceryItems = Array.from(groceryMap.values()).sort((a, b) => a.name.localeCompare(b.name));
       const avgPerDayBudget = totalBudget / numDays;
       const avgPerDayPlanCost = estimatedTotalCost / numDays;
 
@@ -1413,9 +1227,6 @@
       return parseFloat(num.toFixed(decimals));
     }
 
-    /***********************
-     * RENDERING           *
-     ***********************/
     function renderPlan(plan) {
       resultsContainer.innerHTML = "";
       resultsContainer.classList.add("scrollable");
@@ -1564,7 +1375,6 @@
       resultsContainer.appendChild(groceryCard);
     }
 
-    // Load saved settings on startup
     loadSettings();
   </script>
 </body>
