@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Healthy Meal Engine – Built for Busy Workers on a Budget</title>
+  <title>Healthy Meal Engine – Simple, Cheap, Healthy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Healthy Meal Engine: generate realistic, budget-friendly meal plans and grocery lists designed for busy workers and budget-focused eaters." />
+  <meta name="description" content="Healthy Meal Engine: turn your grocery budget into a realistic, healthy meal plan and grocery list built for busy workers and budget-focused eaters." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,19 +17,17 @@
 
   <style>
     :root {
-      --bg: #0f172a;
-      --bg-alt: #020617;
-      --card: #020617;
-      --card-alt: #020617;
+      --bg: #f3f4f6;
+      --bg-soft: #f9fafb;
+      --card: #ffffff;
       --accent: #22c55e;
-      --accent-soft: rgba(34, 197, 94, 0.15);
+      --accent-soft: rgba(34, 197, 94, 0.12);
       --accent-strong: #16a34a;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --danger: #f97373;
-      --border-subtle: rgba(148, 163, 184, 0.25);
-      --chip-bg: rgba(148, 163, 184, 0.25);
-      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.9);
+      --text: #111827;
+      --muted: #6b7280;
+      --danger: #dc2626;
+      --border-subtle: #e5e7eb;
+      --shadow-soft: 0 16px 40px rgba(15, 23, 42, 0.12);
       --radius-lg: 18px;
       --radius-pill: 999px;
     }
@@ -42,7 +40,7 @@
       margin: 0;
       min-height: 100vh;
       font-family: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top left, #1e293b 0, #020617 45%, #000 100%);
+      background: radial-gradient(circle at top, #e5f9ee 0, #f9fafb 40%, #f3f4f6 100%);
       color: var(--text);
       display: flex;
       justify-content: center;
@@ -52,56 +50,59 @@
     .app-shell {
       width: 100%;
       max-width: 1120px;
-      background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(2,6,23,0.98));
-      border-radius: 28px;
-      padding: 24px 24px 28px;
+      background: var(--bg-soft);
+      border-radius: 26px;
+      padding: 20px 20px 24px;
       box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      backdrop-filter: blur(18px);
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+      border: 1px solid #e5e7eb;
     }
 
     header {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 18px;
       align-items: center;
-      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 850px) {
+      header {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
 
     .brand-lockup {
       display: flex;
-      align-items: center;
       gap: 12px;
+      align-items: flex-start;
     }
 
     .brand-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-      background: conic-gradient(from 210deg, #22c55e, #bef264, #4ade80, #22c55e);
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      background: conic-gradient(from 210deg, #22c55e, #a3e635, #4ade80, #22c55e);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.6);
+      box-shadow: 0 12px 28px rgba(34, 197, 94, 0.4);
+      flex-shrink: 0;
     }
 
     .brand-icon span {
       font-weight: 800;
       font-size: 22px;
-      color: #022c22;
+      color: #052e16;
     }
 
     .brand-text h1 {
       margin: 0;
-      font-size: 20px;
+      font-size: 22px;
       letter-spacing: 0.02em;
     }
 
     .brand-text p {
-      margin: 2px 0 0;
+      margin: 4px 0 0;
       font-size: 13px;
       color: var(--muted);
     }
@@ -110,59 +111,126 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      margin-top: 10px;
     }
 
     .chip {
       border-radius: var(--radius-pill);
-      padding: 6px 12px;
-      font-size: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      color: var(--muted);
+      padding: 6px 10px;
+      font-size: 11px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(15,23,42,0.9);
+      color: var(--muted);
     }
 
     .chip-dot {
-      width: 9px;
-      height: 9px;
+      width: 8px;
+      height: 8px;
       border-radius: 999px;
-      background: var(--accent);
-      box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
+      background: #22c55e;
     }
 
     .chip.secondary .chip-dot {
       background: #6366f1;
-      box-shadow: 0 0 10px rgba(99, 102, 241, 0.8);
     }
 
     .chip-label-strong {
       font-weight: 600;
-      color: #e5e7eb;
+      color: #111827;
     }
 
+    .hero-visual {
+      background: #ecfdf5;
+      border-radius: 20px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 8px;
+      align-items: center;
+      border: 1px solid #bbf7d0;
+    }
+
+    @media (max-width: 850px) {
+      .hero-visual {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hero-text {
+      font-size: 12px;
+      color: #166534;
+    }
+
+    .hero-text strong {
+      font-weight: 700;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .hero-badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #bbf7d0;
+      color: #064e3b;
+    }
+
+    .hero-images {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .hero-img {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #86efac;
+      height: 70px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero-img.main {
+      grid-column: 1 / -1;
+      height: 80px;
+    }
+
+    /* Layout */
     .layout {
       display: grid;
       grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.4fr);
-      gap: 20px;
+      gap: 18px;
       align-items: flex-start;
     }
 
+    @media (max-width: 880px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
     .panel {
-      border-radius: 22px;
-      padding: 18px 18px 20px;
-      background: radial-gradient(circle at top left, #020617 0, #020617 55%, #000 100%);
+      border-radius: 18px;
+      padding: 16px 16px 18px;
+      background: #ffffff;
       border: 1px solid var(--border-subtle);
     }
 
     .panel h2 {
-      margin: 0 0 10px;
+      margin: 0 0 8px;
       font-size: 16px;
     }
 
     .panel-subtitle {
-      margin: 0 0 14px;
+      margin: 0 0 12px;
       font-size: 13px;
       color: var(--muted);
     }
@@ -181,7 +249,7 @@
 
     label {
       font-size: 13px;
-      color: #e5e7eb;
+      color: #111827;
     }
 
     label span.hint {
@@ -194,8 +262,8 @@
     select,
     textarea {
       border-radius: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(15,23,42,0.9);
+      border: 1px solid var(--border-subtle);
+      background: #f9fafb;
       color: var(--text);
       font-size: 13px;
       padding: 7px 10px;
@@ -206,7 +274,7 @@
 
     input::placeholder,
     textarea::placeholder {
-      color: #6b7280;
+      color: #9ca3af;
     }
 
     input:focus,
@@ -214,7 +282,7 @@
     textarea:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.35);
-      background: rgba(15,23,42,0.95);
+      background: #ffffff;
     }
 
     select {
@@ -226,8 +294,8 @@
       gap: 6px;
       border-radius: 999px;
       padding: 4px;
-      background: rgba(15,23,42,0.9);
-      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
     }
 
     .persona-option {
@@ -241,27 +309,50 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      background: transparent;
     }
 
     .persona-option.active {
-      background: radial-gradient(circle at top, var(--accent) 0, var(--accent-strong) 55%, #16a34a 100%);
-      border-color: rgba(22, 163, 74, 0.9);
-      color: #022c22;
+      background: #22c55e;
+      border-color: #16a34a;
+      color: #f0fdf4;
       font-weight: 600;
-      box-shadow: 0 9px 20px rgba(34, 197, 94, 0.5);
+      box-shadow: 0 8px 20px rgba(22, 163, 74, 0.35);
     }
 
     .persona-note {
-      margin: 4px 0 0;
+      margin: 2px 0 0;
       font-size: 11px;
       color: var(--muted);
+    }
+
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .preset-chip {
+      padding: 4px 9px;
+      font-size: 11px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .preset-chip:hover {
+      border-color: var(--accent);
+      color: #15803d;
     }
 
     .controls-row {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 16px;
+      margin-top: 14px;
       align-items: center;
     }
 
@@ -280,9 +371,9 @@
 
     .primary-btn {
       background: linear-gradient(120deg, var(--accent), var(--accent-strong));
-      color: #022c22;
+      color: #f0fdf4;
       font-weight: 600;
-      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.55);
+      box-shadow: 0 10px 24px rgba(22, 163, 74, 0.35);
     }
 
     .primary-btn:disabled {
@@ -292,9 +383,9 @@
     }
 
     .ghost-btn {
-      background: rgba(15,23,42,0.9);
+      background: #ffffff;
       color: var(--muted);
-      border: 1px solid rgba(148, 163, 184, 0.6);
+      border: 1px solid #e5e7eb;
     }
 
     .ghost-btn span.icon {
@@ -306,7 +397,7 @@
       color: var(--muted);
     }
 
-    /* Results panel */
+    /* Results + cards */
     #results {
       display: flex;
       flex-direction: column;
@@ -326,54 +417,55 @@
       gap: 10px;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 10px;
+      padding: 8px 10px;
       border-radius: 999px;
-      background: radial-gradient(circle at left, var(--accent-soft) 0, rgba(15,23,42,1) 55%);
-      border: 1px solid rgba(34, 197, 94, 0.3);
+      background: #ecfdf3;
+      border: 1px solid #bbf7d0;
+      font-size: 12px;
     }
 
     .summary-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 12px;
     }
 
     .pill-label {
-      color: var(--muted);
+      color: #4b5563;
     }
 
     .pill-value {
       font-weight: 600;
-      color: #bbf7d0;
+      color: #166534;
     }
 
     .pill-badge {
       font-size: 11px;
-      padding: 2px 8px;
+      padding: 3px 8px;
       border-radius: 999px;
-      border: 1px solid rgba(34, 197, 94, 0.6);
-      background: rgba(15,23,42,0.7);
-      color: #bbf7d0;
+      border: 1px solid #bbf7d0;
+      background: #dcfce7;
+      color: #166534;
     }
 
     .pill-badge.over {
-      border-color: rgba(248, 113, 113, 0.9);
-      color: #fecaca;
-      background: rgba(127, 29, 29, 0.7);
+      border-color: #fecaca;
+      color: #b91c1c;
+      background: #fee2e2;
     }
 
-    .pill-badge.under {
-      border-color: rgba(34, 197, 94, 0.9);
-      background: rgba(21, 128, 61, 0.7);
+    .pill-badge.tight {
+      color: #92400e;
+      background: #fffbeb;
+      border-color: #fed7aa;
     }
 
     .day-card {
-      margin-top: 8px;
+      margin-top: 4px;
       border-radius: 14px;
       padding: 10px 10px 12px;
-      background: rgba(15,23,42,0.95);
-      border: 1px solid rgba(51, 65, 85, 0.9);
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
     }
 
     .day-header {
@@ -395,15 +487,15 @@
 
     .meal-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
       gap: 6px;
     }
 
     .meal-pill {
       border-radius: 12px;
       padding: 7px 8px;
-      background: rgba(15,23,42,1);
-      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
       font-size: 12px;
     }
 
@@ -411,7 +503,7 @@
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: var(--muted);
+      color: #6b7280;
       display: block;
       margin-bottom: 2px;
     }
@@ -427,37 +519,41 @@
       font-size: 10px;
       padding: 2px 6px;
       border-radius: 999px;
-      background: rgba(15,23,42,1);
-      border: 1px solid rgba(75, 85, 99, 0.9);
-      color: #9ca3af;
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      color: #6b7280;
     }
 
     .tag.busy {
-      border-color: rgba(59, 130, 246, 0.9);
-      color: #bfdbfe;
+      border-color: #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
     }
 
     .tag.budget {
-      border-color: rgba(34, 197, 94, 0.9);
-      color: #bbf7d0;
+      border-color: #bbf7d0;
+      background: #dcfce7;
+      color: #166534;
     }
 
     .tag.protein {
-      border-color: rgba(249, 115, 22, 0.9);
-      color: #fed7aa;
+      border-color: #fed7aa;
+      background: #fffbeb;
+      color: #c2410c;
     }
 
     .tag.quick {
-      border-color: rgba(244, 63, 94, 0.9);
-      color: #fecaca;
+      border-color: #fecaca;
+      background: #fee2e2;
+      color: #b91c1c;
     }
 
     .grocery-card {
-      margin-top: 8px;
+      margin-top: 4px;
       border-radius: 14px;
       padding: 10px 10px 12px;
-      background: rgba(2,6,23,0.98);
-      border: 1px solid rgba(30, 64, 175, 0.9);
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
     }
 
     .grocery-header {
@@ -479,7 +575,7 @@
 
     .grocery-list {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 4px;
       margin-top: 4px;
       font-size: 11px;
@@ -488,15 +584,15 @@
     .grocery-item {
       padding: 4px 6px;
       border-radius: 9px;
-      background: rgba(15,23,42,0.96);
-      border: 1px dashed rgba(51, 65, 85, 0.9);
+      background: #ffffff;
+      border: 1px dashed #e5e7eb;
       display: flex;
       justify-content: space-between;
       gap: 6px;
     }
 
     .grocery-name {
-      color: #e5e7eb;
+      color: #111827;
     }
 
     .grocery-uses {
@@ -516,7 +612,7 @@
     }
 
     footer {
-      margin-top: 6px;
+      margin-top: 10px;
       font-size: 11px;
       color: var(--muted);
       display: flex;
@@ -526,7 +622,7 @@
     }
 
     footer a {
-      color: #a5b4fc;
+      color: #2563eb;
       text-decoration: none;
     }
 
@@ -534,29 +630,11 @@
       text-decoration: underline;
     }
 
-    @media (max-width: 880px) {
+    @media (max-width: 640px) {
       .app-shell {
-        padding: 18px 16px 22px;
-        border-radius: 0;
+        padding: 16px 14px 20px;
+        border-radius: 18px;
         box-shadow: none;
-        border-radius: 20px;
-      }
-      .layout {
-        grid-template-columns: minmax(0, 1fr);
-      }
-      #results {
-        max-height: none;
-      }
-    }
-
-    @media (max-width: 520px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .summary-bar {
-        flex-direction: column;
-        align-items: flex-start;
       }
     }
   </style>
@@ -564,27 +642,46 @@
 <body>
   <div class="app-shell">
     <header>
-      <div class="brand-lockup">
-        <div class="brand-icon"><span>H</span></div>
-        <div class="brand-text">
-          <h1>Healthy Meal Engine</h1>
-          <p>Designed for Busy Workers & Budget-Focused Eaters</p>
+      <div>
+        <div class="brand-lockup">
+          <div class="brand-icon"><span>H</span></div>
+          <div class="brand-text">
+            <h1>Healthy Meal Engine</h1>
+            <p>Turn your grocery budget into a simple, healthy, realistic plan.</p>
+          </div>
+        </div>
+        <div class="persona-chips">
+          <div class="chip">
+            <div class="chip-dot"></div>
+            <div>
+              <div class="chip-label-strong">Primary: Busy Worker</div>
+              <div style="font-size:11px;">Max results • minimal cooking • still healthy</div>
+            </div>
+          </div>
+          <div class="chip secondary">
+            <div class="chip-dot"></div>
+            <div>
+              <div class="chip-label-strong">Secondary: Budget-First</div>
+              <div style="font-size:11px;">Stretch every dollar without eating trash</div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="persona-chips">
-        <div class="chip">
-          <div class="chip-dot"></div>
-          <div>
-            <div class="chip-label-strong">Primary: Busy Worker</div>
-            <div style="font-size:11px;color:var(--muted);">Max results | minimal cooking | still healthy</div>
+
+      <div class="hero-visual">
+        <div class="hero-text">
+          <strong>Eat better on a real person budget.</strong><br />
+          No calorie math, no diet culture — just practical meals and a grocery list that match your time, money, and cravings.
+          <div class="hero-badges">
+            <span class="hero-badge">🥗 3 meals + snacks</span>
+            <span class="hero-badge">🛒 Grocery list included</span>
+            <span class="hero-badge">💸 Budget-aware picks</span>
           </div>
         </div>
-        <div class="chip secondary">
-          <div class="chip-dot"></div>
-          <div>
-            <div class="chip-label-strong">Secondary: Budget-First</div>
-            <div style="font-size:11px;color:var(--muted);">Stretch every dollar without eating trash</div>
-          </div>
+        <div class="hero-images">
+          <div class="hero-img main" style="background-image:url('https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800');"></div>
+          <div class="hero-img" style="background-image:url('https://images.pexels.com/photos/4259707/pexels-photo-4259707.jpeg?auto=compress&cs=tinysrgb&w=800');"></div>
+          <div class="hero-img" style="background-image:url('https://images.pexels.com/photos/3738755/pexels-photo-3738755.jpeg?auto=compress&cs=tinysrgb&w=800');"></div>
         </div>
       </div>
     </header>
@@ -594,14 +691,14 @@
       <section class="panel">
         <h2>Build Your Week</h2>
         <p class="panel-subtitle">
-          Tell the engine how you actually live, and it will build realistic meals + a grocery list that fits your budget.
+          Tell the engine how you actually live. We’ll return meals and a grocery list that match your budget and energy.
         </p>
 
         <div class="form-grid">
           <div class="form-row">
             <label for="persona">
               Focus mode
-              <span class="hint">This nudges the engine toward faster or cheaper meals.</span>
+              <span class="hint">Quick & easy vs ultra-cheap.</span>
             </label>
             <div class="persona-toggle" id="personaToggle">
               <button type="button" class="persona-option active" data-persona="busy">
@@ -628,6 +725,17 @@
               <div style="width:120px;">
                 <input type="number" id="numDays" placeholder="# days" min="1" max="10" />
               </div>
+            </div>
+            <div class="preset-row">
+              <button type="button" class="preset-chip" data-budget="75" data-days="5">
+                Solo • 5 days • ~$75
+              </button>
+              <button type="button" class="preset-chip" data-budget="100" data-days="7">
+                Solo • 7 days • ~$100
+              </button>
+              <button type="button" class="preset-chip" data-budget="150" data-days="7">
+                2 people • 7 days • ~$150
+              </button>
             </div>
           </div>
 
@@ -673,10 +781,10 @@
       </section>
 
       <!-- RIGHT: RESULTS -->
-      <section class="panel">
+      <section class="panel" id="resultsPanel">
         <h2>Your Weekly Plan</h2>
         <p class="panel-subtitle">
-          You’ll see daily meals first, then a consolidated grocery list. This is built for real life, not Pinterest.
+          Daily meals first, then a consolidated grocery list. Built for real life, not Pinterest perfection.
         </p>
 
         <div id="results">
@@ -685,13 +793,21 @@
             <strong>Generate meal plan</strong>. Your meals and grocery list will show up here.
           </div>
         </div>
+
+        <div class="controls-row" style="margin-top:8px;">
+          <button id="copyGroceriesBtn" class="ghost-btn" type="button" disabled>
+            <span class="icon">📋</span>
+            <span>Copy grocery list</span>
+          </button>
+        </div>
+
         <div id="errorBox" class="error-text" style="display:none;"></div>
       </section>
     </div>
 
     <footer>
-      <span>Healthy Meal Engine · v1.0 – Busy Worker & Budget-First edition</span>
-      <span>Tip: Once you like a plan, hit “Download as PDF” and bring it to the store.</span>
+      <span>Healthy Meal Engine · v1.2 – Light theme, Busy Worker & Budget-First edition</span>
+      <span>Tip: Once you like a plan, download the PDF or paste the list into Notes before shopping.</span>
     </footer>
   </div>
 
@@ -980,6 +1096,7 @@
     ];
 
     const CATEGORIES = ["Breakfast", "Lunch", "Dinner", "Snacks", "Beverages"];
+    const SETTINGS_KEY = "hme_settings_v1";
 
     /***********************
      * STATE + ELEMENTS    *
@@ -993,12 +1110,72 @@
     const constraintsInput = document.getElementById("constraints");
     const generateBtn = document.getElementById("generateBtn");
     const downloadBtn = document.getElementById("downloadBtn");
+    const copyGroceriesBtn = document.getElementById("copyGroceriesBtn");
     const statusText = document.getElementById("statusText");
     const resultsContainer = document.getElementById("results");
+    const resultsPanel = document.getElementById("resultsPanel");
     const errorBox = document.getElementById("errorBox");
 
     let currentPlanSnapshot = null;
     let currentPersona = "busy";
+
+    /***********************
+     * SETTINGS STORAGE    *
+     ***********************/
+    function loadSettings() {
+      try {
+        const raw = localStorage.getItem(SETTINGS_KEY);
+        if (!raw) return;
+        const s = JSON.parse(raw);
+
+        if (s.persona && (s.persona === "busy" || s.persona === "budget")) {
+          currentPersona = s.persona;
+          document.querySelectorAll(".persona-option").forEach(b => {
+            b.classList.toggle("active", b.dataset.persona === s.persona);
+          });
+          personaNote.textContent =
+            currentPersona === "busy"
+              ? "Busy Worker: prioritizes quick-prep or ready-to-eat meals that still hit the health bar."
+              : "Budget-First: nudges the engine toward lower-cost meals, even if prep takes a bit longer.";
+        }
+
+        if (typeof s.totalBudget === "number") {
+          totalBudgetInput.value = s.totalBudget;
+        }
+        if (typeof s.numDays === "number") {
+          numDaysInput.value = s.numDays;
+        }
+        if (s.dietPreference) {
+          dietPreferenceSelect.value = s.dietPreference;
+        }
+        if (s.dislikes) {
+          dislikesInput.value = s.dislikes;
+        }
+        if (s.constraints) {
+          constraintsInput.value = s.constraints;
+        }
+      } catch (e) {
+        console.warn("Could not load saved settings", e);
+      }
+    }
+
+    function saveSettings(payload) {
+      try {
+        localStorage.setItem(
+          SETTINGS_KEY,
+          JSON.stringify({
+            persona: payload.persona,
+            totalBudget: payload.totalBudget,
+            numDays: payload.numDays,
+            dietPreference: payload.dietPreference,
+            dislikes: payload.dislikesRaw,
+            constraints: payload.constraints
+          })
+        );
+      } catch (e) {
+        console.warn("Could not save settings", e);
+      }
+    }
 
     /***********************
      * UI HANDLERS         *
@@ -1013,8 +1190,17 @@
 
       personaNote.textContent =
         currentPersona === "busy"
-          ? "Busy Worker: prioritizes quick-prep or grab-and-go meals that still hit the health bar."
+          ? "Busy Worker: prioritizes quick-prep or ready-to-eat meals that still hit the health bar."
           : "Budget-First: nudges the engine toward lower-cost meals, even if prep takes a bit longer.";
+    });
+
+    document.querySelectorAll(".preset-chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        const b = chip.getAttribute("data-budget");
+        const d = chip.getAttribute("data-days");
+        if (b) totalBudgetInput.value = b;
+        if (d) numDaysInput.value = d;
+      });
     });
 
     generateBtn.addEventListener("click", () => {
@@ -1045,24 +1231,35 @@
       generateBtn.textContent = "Generating…";
       statusText.textContent = "Thinking through your week and matching meals to your budget…";
 
-      // "Fake" processing delay just for UX
       setTimeout(() => {
         const plan = buildPlan({
           totalBudget,
           numDays,
           dietPreference,
           dislikes,
+          dislikesRaw,
           persona: currentPersona,
           constraints
         });
 
         currentPlanSnapshot = plan;
         renderPlan(plan);
+
+        saveSettings({
+          persona: currentPersona,
+          totalBudget,
+          numDays,
+          dietPreference,
+          dislikesRaw,
+          constraints
+        });
+
         generateBtn.disabled = false;
         generateBtn.textContent = "Generate meal plan";
         downloadBtn.disabled = false;
+        copyGroceriesBtn.disabled = false;
         statusText.textContent = "Plan generated. Adjust inputs and re-run any time.";
-      }, 300);
+      }, 250);
     });
 
     downloadBtn.addEventListener("click", async () => {
@@ -1073,18 +1270,16 @@
       statusText.textContent = "Converting your plan to a printable PDF…";
 
       try {
-        // Wait for jsPDF to be available
-        const resultsEl = document.querySelector(".panel:nth-of-type(2)");
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF("p", "pt", "a4");
 
-        await doc.html(resultsEl, {
+        await doc.html(resultsPanel, {
           callback: function (doc) {
             doc.save("Healthy-Meal-Plan.pdf");
           },
           margin: [24, 24, 24, 24],
           autoPaging: "text",
-          html2canvas: { scale: 0.6, useCORS: true }
+          html2canvas: { scale: 0.7, useCORS: true }
         });
 
         statusText.textContent = "PDF downloaded. You’re ready for the store.";
@@ -1094,6 +1289,32 @@
       } finally {
         downloadBtn.disabled = false;
         downloadBtn.textContent = "Download as PDF";
+      }
+    });
+
+    copyGroceriesBtn.addEventListener("click", () => {
+      if (!currentPlanSnapshot) return;
+
+      const lines = [];
+      lines.push("Grocery list from Healthy Meal Engine");
+      lines.push("");
+      currentPlanSnapshot.groceryItems.forEach(item => {
+        lines.push(`- ${item.name} (${item.uses}x, approx. $${roundTo(item.estCost)})`);
+      });
+
+      const text = lines.join("\n");
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard
+          .writeText(text)
+          .then(() => {
+            statusText.textContent = "Grocery list copied. Paste into Notes or Reminders.";
+          })
+          .catch(() => {
+            alert("Grocery list copied (or mostly copied). If it didn’t work, long-press and select manually.");
+          });
+      } else {
+        alert("Grocery list copied (or mostly copied). If it didn’t work, long-press and select manually.");
       }
     });
 
@@ -1109,7 +1330,6 @@
     function filterMealsByDietAndDislikes(dietPreference, dislikes) {
       return MEALS.filter(meal => {
         if (!meal.diet.includes(dietPreference)) return false;
-
         if (dislikes.length) {
           const ingredientsJoined = meal.ingredients.join(" ").toLowerCase();
           if (dislikes.some(d => d && ingredientsJoined.includes(d))) {
@@ -1124,16 +1344,13 @@
       const filtered = catalog.filter(m => m.category === category);
       if (filtered.length === 0) return null;
 
-      // Sort based on persona
       const sorted = [...filtered].sort((a, b) => {
         if (persona === "busy") {
-          return a.prepMinutes - b.prepMinutes; // quicker first
+          return a.prepMinutes - b.prepMinutes;
         }
-        // budget-first
-        return a.costPerServing - b.costPerServing; // cheaper first
+        return a.costPerServing - b.costPerServing;
       });
 
-      // To avoid everything feeling identical, pick from first 2–3 options if possible
       const maxIndex = Math.min(sorted.length - 1, 2);
       const pickIndex = Math.floor(Math.random() * (maxIndex + 1));
       return sorted[pickIndex];
@@ -1164,7 +1381,7 @@
             }
             const record = groceryMap.get(key);
             record.uses += 1;
-            record.estCost += meal.costPerServing * 0.15; // Rough allocation
+            record.estCost += meal.costPerServing * 0.15;
           });
         });
 
@@ -1203,7 +1420,6 @@
       resultsContainer.innerHTML = "";
       resultsContainer.classList.add("scrollable");
 
-      // Summary bar
       const summaryBar = document.createElement("div");
       summaryBar.className = "summary-bar";
 
@@ -1217,22 +1433,22 @@
       const estPill = document.createElement("div");
       estPill.className = "summary-pill";
       estPill.innerHTML = `
-        <span class="pill-label">Estimated total cost:</span>
+        <span class="pill-label">Estimated food cost:</span>
         <span class="pill-value">$${plan.estimatedTotalCost}</span>
       `;
 
       const badge = document.createElement("div");
-      badge.classList.add("pill-badge");
+      badge.className = "pill-badge";
       const diff = plan.totalBudget - plan.estimatedTotalCost;
 
-      if (diff >= 2) {
-        badge.classList.add("under");
+      if (diff >= 3) {
         badge.textContent = `~$${roundTo(diff)} under budget (buffer for tax / price swings)`;
-      } else if (diff >= -2) {
+      } else if (diff >= -3) {
+        badge.classList.add("tight");
         badge.textContent = "Hugging your budget pretty closely";
       } else {
         badge.classList.add("over");
-        badge.textContent = `~$${Math.abs(roundTo(diff))} over budget – use cheaper swaps if needed`;
+        badge.textContent = `~$${Math.abs(roundTo(diff))} over budget – swap a few cheaper meals if needed`;
       }
 
       summaryBar.appendChild(budgetPill);
@@ -1240,7 +1456,6 @@
       summaryBar.appendChild(badge);
       resultsContainer.appendChild(summaryBar);
 
-      // Constraints note if present
       if (plan.constraints) {
         const note = document.createElement("div");
         note.className = "results-empty";
@@ -1248,7 +1463,6 @@
         resultsContainer.appendChild(note);
       }
 
-      // Days
       plan.days.forEach(day => {
         const card = document.createElement("div");
         card.className = "day-card";
@@ -1313,7 +1527,6 @@
         resultsContainer.appendChild(card);
       });
 
-      // Grocery list
       const groceryCard = document.createElement("div");
       groceryCard.className = "grocery-card";
 
@@ -1350,6 +1563,9 @@
       groceryCard.appendChild(groceryList);
       resultsContainer.appendChild(groceryCard);
     }
+
+    // Load saved settings on startup
+    loadSettings();
   </script>
 </body>
 </html>
