@@ -233,7 +233,7 @@
       color: var(--muted);
     }
 
-    /* Step styling to break the “Google Form” feel */
+    /* Step styling */
     .step-block {
       background: #f9fafb;
       border-radius: 18px;
@@ -580,6 +580,26 @@
       color: #b91c1c;
     }
 
+    .meal-instructions {
+      margin-top: 4px;
+      font-size: 11px;
+      color: #4b5563;
+    }
+
+    .meal-instructions-title {
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .meal-instructions ul {
+      margin: 0;
+      padding-left: 16px;
+    }
+
+    .meal-instructions li {
+      margin: 0 0 2px;
+    }
+
     .grocery-card {
       margin-top: 4px;
       border-radius: 16px;
@@ -603,11 +623,12 @@
     .grocery-meta {
       font-size: 11px;
       color: var(--muted);
+      text-align: right;
     }
 
     .grocery-list {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
       gap: 4px;
       margin-top: 4px;
       font-size: 11px;
@@ -619,12 +640,21 @@
       background: #ffffff;
       border: 1px dashed #e5e7eb;
       display: flex;
-      justify-content: space-between;
-      gap: 6px;
+      flex-direction: column;
+      gap: 2px;
     }
 
-    .grocery-name { color: #111827; }
-    .grocery-uses { color: var(--muted); }
+    .grocery-name { color: #111827; font-weight: 600; }
+
+    .grocery-uses {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .grocery-store-tag {
+      font-size: 10px;
+      color: #166534;
+    }
 
     .results-empty {
       margin-top: 6px;
@@ -818,7 +848,7 @@
 
         <div class="controls-row">
           <button id="generateBtn" class="primary-btn">
-            <span>Generate meal plan</span>
+            <span>See my weekly plan</span>
           </button>
           <button id="downloadBtn" class="ghost-btn" disabled>
             <span class="icon">⬇︎</span>
@@ -838,7 +868,7 @@
         <div id="results">
           <div class="results-empty">
             Plug in your budget and days on the left, then hit
-            <strong>Generate meal plan</strong>. Your meals and grocery list will show up here.
+            <strong>See my weekly plan</strong>. Your meals and grocery list will show up here.
           </div>
         </div>
 
@@ -854,108 +884,555 @@
     </div>
 
     <footer>
-      <span>Healthy Meal Engine · v1.3 – Light, “not a Google Form” edition</span>
-      <span>Tip: Once you like a plan, download the PDF or paste the list into Notes before shopping.</span>
+      <span>Healthy Meal Engine · v1.4 – Cooking steps + store hints edition</span>
+      <span>Prices are rough estimates based on discount-grocer style pricing. Your store may vary.</span>
     </footer>
   </div>
 
   <script>
     /***********************
+     * INGREDIENT META     *
+     * (store + price band)
+     ***********************/
+    const INGREDIENT_META = {
+      "chicken breast": {
+        storeLabel: "Discount grocer (Aldi/Lidl/Walmart)",
+        priceBand: "$"
+      },
+      "chicken thighs": {
+        storeLabel: "Discount grocer (Aldi/Lidl/Walmart)",
+        priceBand: "$"
+      },
+      "eggs": {
+        storeLabel: "Discount grocer (Aldi/Lidl/Walmart)",
+        priceBand: "$"
+      },
+      "greek yogurt": {
+        storeLabel: "Discount grocer (Aldi/Lidl/Walmart)",
+        priceBand: "$"
+      },
+      "frozen berry": {
+        storeLabel: "Discount grocer or big-box freezer aisle",
+        priceBand: "$"
+      },
+      "granola": {
+        storeLabel: "Big-box or grocery cereal aisle",
+        priceBand: "$$"
+      },
+      "oats": {
+        storeLabel: "Discount grocer or bulk aisle",
+        priceBand: "$"
+      },
+      "chia": {
+        storeLabel: "Big-box / bulk or online (Amazon)",
+        priceBand: "$$"
+      },
+      "bananas": {
+        storeLabel: "Any grocery store",
+        priceBand: "$"
+      },
+      "spinach": {
+        storeLabel: "Produce section (any grocery)",
+        priceBand: "$"
+      },
+      "bell peppers": {
+        storeLabel: "Produce section (any grocery)",
+        priceBand: "$"
+      },
+      "protein powder": {
+        storeLabel: "Online / big-box (Amazon, Walmart, Target)",
+        priceBand: "$$"
+      },
+      "frozen broccoli": {
+        storeLabel: "Discount grocer freezer aisle",
+        priceBand: "$"
+      },
+      "brown rice": {
+        storeLabel: "Discount grocer or bulk aisle",
+        priceBand: "$"
+      },
+      "tuna": {
+        storeLabel: "Canned goods aisle (any grocery)",
+        priceBand: "$"
+      },
+      "whole grain bread": {
+        storeLabel: "Bakery or bread aisle (any grocery)",
+        priceBand: "$"
+      },
+      "hummus": {
+        storeLabel: "Refrigerated dips (any grocery)",
+        priceBand: "$"
+      },
+      "tortilla": {
+        storeLabel: "Bread/tortilla aisle (any grocery)",
+        priceBand: "$"
+      },
+      "feta": {
+        storeLabel: "Cheese section (any grocery)",
+        priceBand: "$$"
+      },
+      "frozen grain & veggie bowl": {
+        storeLabel: "Freezer aisle (big-box / grocery)",
+        priceBand: "$$"
+      },
+      "rotisserie chicken": {
+        storeLabel: "Grocery deli / hot foods",
+        priceBand: "$$"
+      },
+      "baby potatoes": {
+        storeLabel: "Produce section (any grocery)",
+        priceBand: "$"
+      },
+      "carrots": {
+        storeLabel: "Produce section (any grocery)",
+        priceBand: "$"
+      },
+      "dry lentils": {
+        storeLabel: "Dry goods / bulk aisle",
+        priceBand: "$"
+      },
+      "canned tomatoes": {
+        storeLabel: "Canned goods aisle",
+        priceBand: "$"
+      },
+      "veggie broth": {
+        storeLabel: "Soup/broth aisle",
+        priceBand: "$"
+      },
+      "frozen stir-fry": {
+        storeLabel: "Freezer aisle (any grocery)",
+        priceBand: "$"
+      },
+      "salmon": {
+        storeLabel: "Freezer / seafood section",
+        priceBand: "$$"
+      },
+      "green beans": {
+        storeLabel: "Frozen or produce section",
+        priceBand: "$"
+      },
+      "apples": {
+        storeLabel: "Produce section (any grocery)",
+        priceBand: "$"
+      },
+      "peanut butter": {
+        storeLabel: "Peanut butter/jam aisle",
+        priceBand: "$"
+      },
+      "protein bar": {
+        storeLabel: "Snacks or nutrition aisle (big-box/grocery)",
+        priceBand: "$$"
+      },
+      "green tea": {
+        storeLabel: "Tea/coffee aisle",
+        priceBand: "$"
+      },
+      "electrolyte powder": {
+        storeLabel: "Sports nutrition / pharmacy / online",
+        priceBand: "$$"
+      },
+      "coffee": {
+        storeLabel: "Coffee aisle (any grocery)",
+        priceBand: "$"
+      },
+      "default": {
+        storeLabel: "Any grocery store / big-box",
+        priceBand: "$$"
+      }
+    };
+
+    function getIngredientMeta(ingredientName) {
+      const lc = ingredientName.toLowerCase();
+      for (const pattern in INGREDIENT_META) {
+        if (pattern === "default") continue;
+        if (lc.includes(pattern)) {
+          return INGREDIENT_META[pattern];
+        }
+      }
+      return INGREDIENT_META["default"];
+    }
+
+    /***********************
      * DATA: MEAL CATALOG  *
      ***********************/
     const MEALS = [
       // BREAKFAST
-      { category:"Breakfast", name:"Greek yogurt + berries + granola",
-        diet:["omnivore","high-protein","vegetarian"],
-        tags:["busy","budget","protein","quick"], prepMinutes:3, costPerServing:2.4,
-        ingredients:["Greek yogurt (tub)","Frozen berry mix","Low-sugar granola"] },
-      { category:"Breakfast", name:"Overnight oats with chia & banana",
-        diet:["omnivore","high-protein","vegetarian"],
-        tags:["busy","budget","quick"], prepMinutes:5, costPerServing:1.5,
-        ingredients:["Rolled oats","Chia seeds","Bananas","Cinnamon","Oat or almond milk"] },
-      { category:"Breakfast", name:"Egg muffin cups (batch cook)",
-        diet:["omnivore","high-protein"],
-        tags:["budget","protein"], prepMinutes:20, costPerServing:1.8,
-        ingredients:["Eggs","Spinach","Bell peppers","Shredded cheese"] },
-      { category:"Breakfast", name:"Protein smoothie (frozen fruit + protein powder)",
-        diet:["omnivore","high-protein","vegetarian"],
-        tags:["busy","protein","quick"], prepMinutes:4, costPerServing:2.2,
-        ingredients:["Protein powder","Frozen fruit","Spinach","Milk or water"] },
+      {
+        category: "Breakfast",
+        name: "Greek yogurt + berries + granola",
+        diet: ["omnivore", "high-protein", "vegetarian"],
+        tags: ["busy", "budget", "protein", "quick"],
+        prepMinutes: 3,
+        costPerServing: 2.4,
+        ingredients: [
+          "Greek yogurt (tub)",
+          "Frozen berry mix",
+          "Low-sugar granola"
+        ],
+        steps: [
+          "Scoop Greek yogurt into a bowl or container.",
+          "Top with a handful of frozen berries.",
+          "Sprinkle granola on top right before eating so it stays crunchy."
+        ]
+      },
+      {
+        category: "Breakfast",
+        name: "Overnight oats with chia & banana",
+        diet: ["omnivore", "high-protein", "vegetarian"],
+        tags: ["busy", "budget", "quick"],
+        prepMinutes: 5,
+        costPerServing: 1.5,
+        ingredients: [
+          "Rolled oats",
+          "Chia seeds",
+          "Bananas",
+          "Cinnamon",
+          "Oat or almond milk"
+        ],
+        steps: [
+          "Add oats, chia seeds, and cinnamon to a jar or container.",
+          "Pour in enough milk to fully cover the oats and stir.",
+          "Refrigerate overnight; add sliced banana in the morning."
+        ]
+      },
+      {
+        category: "Breakfast",
+        name: "Egg muffin cups (batch cook)",
+        diet: ["omnivore", "high-protein"],
+        tags: ["budget", "protein"],
+        prepMinutes: 20,
+        costPerServing: 1.8,
+        ingredients: [
+          "Eggs",
+          "Spinach",
+          "Bell peppers",
+          "Shredded cheese"
+        ],
+        steps: [
+          "Preheat oven to ~350°F (175°C). Grease a muffin tin.",
+          "Whisk eggs in a bowl; stir in chopped spinach, peppers, and cheese.",
+          "Pour into muffin cups and bake 15–20 minutes until set."
+        ]
+      },
+      {
+        category: "Breakfast",
+        name: "Protein smoothie (frozen fruit + protein powder)",
+        diet: ["omnivore", "high-protein", "vegetarian"],
+        tags: ["busy", "protein", "quick"],
+        prepMinutes: 4,
+        costPerServing: 2.2,
+        ingredients: [
+          "Protein powder",
+          "Frozen fruit",
+          "Spinach",
+          "Milk or water"
+        ],
+        steps: [
+          "Add liquid to the blender first (milk or water).",
+          "Add protein powder, frozen fruit, and a handful of spinach.",
+          "Blend until smooth; adjust liquid for desired thickness."
+        ]
+      },
 
       // LUNCH
-      { category:"Lunch", name:"Chicken, rice & broccoli meal-prep bowls",
-        diet:["omnivore","high-protein"],
-        tags:["budget","protein"], prepMinutes:30, costPerServing:3.2,
-        ingredients:["Chicken breast","Brown rice","Frozen broccoli","Olive oil","Garlic powder"] },
-      { category:"Lunch", name:"Tuna salad on whole grain toast",
-        diet:["omnivore","high-protein"],
-        tags:["budget","protein"], prepMinutes:8, costPerServing:2.0,
-        ingredients:["Canned tuna","Greek yogurt or light mayo","Whole grain bread","Pickles or celery"] },
-      { category:"Lunch", name:"Hummus, veggie & feta wrap",
-        diet:["vegetarian","omnivore"],
-        tags:["busy","quick"], prepMinutes:7, costPerServing:2.5,
-        ingredients:["Whole wheat tortilla","Hummus","Cucumber","Carrots","Feta cheese"] },
-      { category:"Lunch", name:"Microwave-friendly frozen veggie + protein bowl",
-        diet:["omnivore","high-protein"],
-        tags:["busy","quick"], prepMinutes:6, costPerServing:3.8,
-        ingredients:["Frozen grain & veggie bowl","Rotisserie chicken (optional)"] },
+      {
+        category: "Lunch",
+        name: "Chicken, rice & broccoli meal-prep bowls",
+        diet: ["omnivore", "high-protein"],
+        tags: ["budget", "protein"],
+        prepMinutes: 30,
+        costPerServing: 3.2,
+        ingredients: [
+          "Chicken breast",
+          "Brown rice",
+          "Frozen broccoli",
+          "Olive oil",
+          "Garlic powder"
+        ],
+        steps: [
+          "Cook brown rice according to package instructions.",
+          "Season chicken with salt, pepper, and garlic powder; pan-sear or bake until cooked through.",
+          "Steam or microwave broccoli. Divide rice, chicken, and broccoli into containers."
+        ]
+      },
+      {
+        category: "Lunch",
+        name: "Tuna salad on whole grain toast",
+        diet: ["omnivore", "high-protein"],
+        tags: ["budget", "protein"],
+        prepMinutes: 8,
+        costPerServing: 2.0,
+        ingredients: [
+          "Canned tuna",
+          "Greek yogurt or light mayo",
+          "Whole grain bread",
+          "Pickles or celery"
+        ],
+        steps: [
+          "Drain canned tuna and add to a bowl.",
+          "Mix with Greek yogurt or light mayo and chopped pickles/celery.",
+          "Toast bread and spread tuna salad on top."
+        ]
+      },
+      {
+        category: "Lunch",
+        name: "Hummus, veggie & feta wrap",
+        diet: ["vegetarian", "omnivore"],
+        tags: ["busy", "quick"],
+        prepMinutes: 7,
+        costPerServing: 2.5,
+        ingredients: [
+          "Whole wheat tortilla",
+          "Hummus",
+          "Cucumber",
+          "Carrots",
+          "Feta cheese"
+        ],
+        steps: [
+          "Spread hummus over the tortilla.",
+          "Add sliced cucumber, shredded carrots, and a sprinkle of feta.",
+          "Roll up tightly and slice in half if desired."
+        ]
+      },
+      {
+        category: "Lunch",
+        name: "Microwave-friendly frozen veggie + protein bowl",
+        diet: ["omnivore", "high-protein"],
+        tags: ["busy", "quick"],
+        prepMinutes: 6,
+        costPerServing: 3.8,
+        ingredients: [
+          "Frozen grain & veggie bowl",
+          "Rotisserie chicken (optional)"
+        ],
+        steps: [
+          "Microwave the frozen grain & veggie bowl per package directions.",
+          "Shred rotisserie chicken and stir into the bowl for extra protein.",
+          "Season to taste (salt, pepper, hot sauce)."
+        ]
+      },
 
       // DINNER
-      { category:"Dinner", name:"Sheet pan chicken, potatoes & carrots",
-        diet:["omnivore","high-protein"],
-        tags:["budget","protein"], prepMinutes:15, costPerServing:3.0,
-        ingredients:["Chicken thighs","Baby potatoes","Carrots","Olive oil","Seasoning blend"] },
-      { category:"Dinner", name:"One-pot lentil & veggie stew",
-        diet:["vegetarian","omnivore"],
-        tags:["budget"], prepMinutes:15, costPerServing:1.9,
-        ingredients:["Dry lentils","Onion","Carrots","Celery","Canned tomatoes","Veggie broth"] },
-      { category:"Dinner", name:"Stir-fry (frozen veggies + chicken + rice)",
-        diet:["omnivore","high-protein"],
-        tags:["busy","protein"], prepMinutes:15, costPerServing:3.1,
-        ingredients:["Frozen stir-fry veggies","Chicken breast or tofu","Rice","Soy sauce or stir-fry sauce"] },
-      { category:"Dinner", name:"Baked salmon, rice & green beans",
-        diet:["omnivore","high-protein"],
-        tags:["protein"], prepMinutes:12, costPerServing:4.2,
-        ingredients:["Frozen salmon fillets","Rice","Frozen green beans","Lemon","Olive oil"] },
+      {
+        category: "Dinner",
+        name: "Sheet pan chicken, potatoes & carrots",
+        diet: ["omnivore", "high-protein"],
+        tags: ["budget", "protein"],
+        prepMinutes: 15,
+        costPerServing: 3.0,
+        ingredients: [
+          "Chicken thighs",
+          "Baby potatoes",
+          "Carrots",
+          "Olive oil",
+          "Seasoning blend"
+        ],
+        steps: [
+          "Preheat oven to ~400°F (200°C) and line a sheet pan.",
+          "Toss chicken, chopped potatoes, and carrots with olive oil and seasoning.",
+          "Spread on the pan and roast 25–35 minutes until cooked through and browned."
+        ]
+      },
+      {
+        category: "Dinner",
+        name: "One-pot lentil & veggie stew",
+        diet: ["vegetarian", "omnivore"],
+        tags: ["budget"],
+        prepMinutes: 15,
+        costPerServing: 1.9,
+        ingredients: [
+          "Dry lentils",
+          "Onion",
+          "Carrots",
+          "Celery",
+          "Canned tomatoes",
+          "Veggie broth"
+        ],
+        steps: [
+          "Sauté chopped onion, carrots, and celery in a pot with a little oil.",
+          "Add rinsed lentils, canned tomatoes, and enough veggie broth to cover.",
+          "Simmer 25–30 minutes until lentils are tender; season with salt and pepper."
+        ]
+      },
+      {
+        category: "Dinner",
+        name: "Stir-fry (frozen veggies + chicken + rice)",
+        diet: ["omnivore", "high-protein"],
+        tags: ["busy", "protein"],
+        prepMinutes: 15,
+        costPerServing: 3.1,
+        ingredients: [
+          "Frozen stir-fry veggies",
+          "Chicken breast or tofu",
+          "Rice",
+          "Soy sauce or stir-fry sauce"
+        ],
+        steps: [
+          "Cook rice according to package instructions.",
+          "Cut chicken or tofu into bite-sized pieces and cook in a pan until browned.",
+          "Add frozen stir-fry veggies and cook until heated through, then drizzle with soy or stir-fry sauce."
+        ]
+      },
+      {
+        category: "Dinner",
+        name: "Baked salmon, rice & green beans",
+        diet: ["omnivore", "high-protein"],
+        tags: ["protein"],
+        prepMinutes: 12,
+        costPerServing: 4.2,
+        ingredients: [
+          "Frozen salmon fillets",
+          "Rice",
+          "Frozen green beans",
+          "Lemon",
+          "Olive oil"
+        ],
+        steps: [
+          "Preheat oven to ~400°F (200°C). Place salmon on a lined tray, drizzle with olive oil, salt, pepper, and lemon.",
+          "Bake salmon 12–18 minutes depending on thickness.",
+          "Cook rice and steam or microwave green beans; serve together."
+        ]
+      },
 
       // SNACKS
-      { category:"Snacks", name:"Carrots & hummus",
-        diet:["omnivore","vegetarian","high-protein"],
-        tags:["busy","budget","quick"], prepMinutes:2, costPerServing:0.9,
-        ingredients:["Baby carrots","Hummus"] },
-      { category:"Snacks", name:"Apple + peanut butter",
-        diet:["omnivore","vegetarian"],
-        tags:["budget","quick"], prepMinutes:2, costPerServing:1.0,
-        ingredients:["Apples","Peanut butter"] },
-      { category:"Snacks", name:"Hard-boiled eggs",
-        diet:["omnivore","high-protein"],
-        tags:["budget","protein"], prepMinutes:10, costPerServing:0.7,
-        ingredients:["Eggs","Salt & pepper"] },
-      { category:"Snacks", name:"Low-sugar protein bar",
-        diet:["omnivore","vegetarian","high-protein"],
-        tags:["busy","quick","protein"], prepMinutes:1, costPerServing:1.5,
-        ingredients:["Box of low-sugar protein bars"] },
+      {
+        category: "Snacks",
+        name: "Carrots & hummus",
+        diet: ["omnivore", "vegetarian", "high-protein"],
+        tags: ["busy", "budget", "quick"],
+        prepMinutes: 2,
+        costPerServing: 0.9,
+        ingredients: [
+          "Baby carrots",
+          "Hummus"
+        ],
+        steps: [
+          "Portion baby carrots into a container or bag.",
+          "Spoon hummus into a small cup or use single-serve packs."
+        ]
+      },
+      {
+        category: "Snacks",
+        name: "Apple + peanut butter",
+        diet: ["omnivore", "vegetarian"],
+        tags: ["budget", "quick"],
+        prepMinutes: 2,
+        costPerServing: 1.0,
+        ingredients: [
+          "Apples",
+          "Peanut butter"
+        ],
+        steps: [
+          "Slice an apple just before eating.",
+          "Serve with a spoonful or two of peanut butter for dipping."
+        ]
+      },
+      {
+        category: "Snacks",
+        name: "Hard-boiled eggs",
+        diet: ["omnivore", "high-protein"],
+        tags: ["budget", "protein"],
+        prepMinutes: 10,
+        costPerServing: 0.7,
+        ingredients: [
+          "Eggs",
+          "Salt & pepper"
+        ],
+        steps: [
+          "Place eggs in a pot and cover with cold water.",
+          "Bring to a gentle boil, then simmer 8–10 minutes.",
+          "Cool in cold water, peel, and season with salt and pepper."
+        ]
+      },
+      {
+        category: "Snacks",
+        name: "Low-sugar protein bar",
+        diet: ["omnivore", "vegetarian", "high-protein"],
+        tags: ["busy", "quick", "protein"],
+        prepMinutes: 1,
+        costPerServing: 1.5,
+        ingredients: [
+          "Box of low-sugar protein bars"
+        ],
+        steps: [
+          "Keep a few bars in your bag, desk, or car.",
+          "Grab one when you need quick protein on the go."
+        ]
+      },
 
       // BEVERAGES
-      { category:"Beverages", name:"Water + flavor drops or lemon",
-        diet:["omnivore","vegetarian","high-protein"],
-        tags:["budget","quick"], prepMinutes:1, costPerServing:0.1,
-        ingredients:["Water","Lemon","Zero-sugar flavor drops (optional)"] },
-      { category:"Beverages", name:"Cold brew coffee (home batch)",
-        diet:["omnivore","vegetarian","high-protein"],
-        tags:["budget","busy"], prepMinutes:10, costPerServing:0.8,
-        ingredients:["Ground coffee","Filtered water","Milk or creamer (optional)"] },
-      { category:"Beverages", name:"Green tea",
-        diet:["omnivore","vegetarian","high-protein"],
-        tags:["budget","quick"], prepMinutes:3, costPerServing:0.4,
-        ingredients:["Green tea bags"] },
-      { category:"Beverages", name:"Electrolyte powder in water",
-        diet:["omnivore","vegetarian","high-protein"],
-        tags:["busy","quick"], prepMinutes:1, costPerServing:0.7,
-        ingredients:["Electrolyte powder","Water"] }
+      {
+        category: "Beverages",
+        name: "Water + flavor drops or lemon",
+        diet: ["omnivore", "vegetarian", "high-protein"],
+        tags: ["budget", "quick"],
+        prepMinutes: 1,
+        costPerServing: 0.1,
+        ingredients: [
+          "Water",
+          "Lemon",
+          "Zero-sugar flavor drops (optional)"
+        ],
+        steps: [
+          "Fill a bottle or large cup with water.",
+          "Squeeze in lemon or add a small amount of flavor drops.",
+          "Sip throughout the day."
+        ]
+      },
+      {
+        category: "Beverages",
+        name: "Cold brew coffee (home batch)",
+        diet: ["omnivore", "vegetarian", "high-protein"],
+        tags: ["budget", "busy"],
+        prepMinutes: 10,
+        costPerServing: 0.8,
+        ingredients: [
+          "Ground coffee",
+          "Filtered water",
+          "Milk or creamer (optional)"
+        ],
+        steps: [
+          "Add coarse ground coffee to a large jar or pitcher.",
+          "Cover with cold water and stir; steep in the fridge 12–24 hours.",
+          "Strain and serve over ice with milk or creamer if desired."
+        ]
+      },
+      {
+        category: "Beverages",
+        name: "Green tea",
+        diet: ["omnivore", "vegetarian", "high-protein"],
+        tags: ["budget", "quick"],
+        prepMinutes: 3,
+        costPerServing: 0.4,
+        ingredients: [
+          "Green tea bags"
+        ],
+        steps: [
+          "Boil water and let it sit 1–2 minutes to cool slightly.",
+          "Steep green tea bag 2–3 minutes.",
+          "Remove bag to avoid bitterness."
+        ]
+      },
+      {
+        category: "Beverages",
+        name: "Electrolyte powder in water",
+        diet: ["omnivore", "vegetarian", "high-protein"],
+        tags: ["busy", "quick"],
+        prepMinutes: 1,
+        costPerServing: 0.7,
+        ingredients: [
+          "Electrolyte powder",
+          "Water"
+        ],
+        steps: [
+          "Fill a bottle with water.",
+          "Add the recommended amount of electrolyte powder and shake.",
+          "Sip pre- or post-workout, or on busy days."
+        ]
+      }
     ];
 
-    const CATEGORIES = ["Breakfast","Lunch","Dinner","Snacks","Beverages"];
+    const CATEGORIES = ["Breakfast", "Lunch", "Dinner", "Snacks", "Beverages"];
     const SETTINGS_KEY = "hme_settings_v1";
 
     /* ELEMENTS & STATE */
@@ -1091,7 +1568,7 @@
         });
 
         generateBtn.disabled = false;
-        generateBtn.textContent = "Generate meal plan";
+        generateBtn.textContent = "See my weekly plan";
         downloadBtn.disabled = false;
         copyGroceriesBtn.disabled = false;
         statusText.textContent = "Plan generated. Adjust inputs and re-run any time.";
@@ -1131,7 +1608,7 @@
       lines.push("Grocery list from Healthy Meal Engine");
       lines.push("");
       currentPlanSnapshot.groceryItems.forEach(item => {
-        lines.push(`- ${item.name} (${item.uses}x, approx. $${roundTo(item.estCost)})`);
+        lines.push(`- ${item.name} (${item.uses}x, approx. $${roundTo(item.estCost)} • ${item.priceBand} • ${item.storeLabel})`);
       });
       const text = lines.join("\n");
 
@@ -1139,9 +1616,9 @@
         navigator.clipboard
           .writeText(text)
           .then(() => { statusText.textContent = "Grocery list copied. Paste into Notes or Reminders."; })
-          .catch(() => { alert("Grocery list copied (or mostly copied). If it didn’t work, long-press and select manually."); });
+          .catch(() => { alert("If it didn’t copy, long-press the list and select manually."); });
       } else {
-        alert("Grocery list copied (or mostly copied). If it didn’t work, long-press and select manually.");
+        alert("If it didn’t copy, long-press the list and select manually.");
       }
     });
 
@@ -1194,7 +1671,14 @@
           meal.ingredients.forEach(ing => {
             const key = ing.toLowerCase();
             if (!groceryMap.has(key)) {
-              groceryMap.set(key, { name: ing, uses: 0, estCost: 0 });
+              const meta = getIngredientMeta(ing);
+              groceryMap.set(key, {
+                name: ing,
+                uses: 0,
+                estCost: 0,
+                storeLabel: meta.storeLabel,
+                priceBand: meta.priceBand
+              });
             }
             const record = groceryMap.get(key);
             record.uses += 1;
@@ -1331,6 +1815,26 @@
           tagsRow.appendChild(baseTag);
 
           pill.appendChild(tagsRow);
+
+          if (meal.steps && meal.steps.length) {
+            const instr = document.createElement("div");
+            instr.className = "meal-instructions";
+            const title = document.createElement("div");
+            title.className = "meal-instructions-title";
+            title.textContent = "How to make:";
+            const list = document.createElement("ul");
+
+            meal.steps.slice(0, 3).forEach(step => {
+              const li = document.createElement("li");
+              li.textContent = step;
+              list.appendChild(li);
+            });
+
+            instr.appendChild(title);
+            instr.appendChild(list);
+            pill.appendChild(instr);
+          }
+
           mealGrid.appendChild(pill);
         });
 
@@ -1346,7 +1850,7 @@
       groceryHeader.innerHTML = `
         <div class="grocery-title">Consolidated grocery list</div>
         <div class="grocery-meta">
-          ${plan.groceryItems.length} unique items • Est. food cost: $${plan.estimatedTotalCost}
+          ${plan.groceryItems.length} unique items<br/>Est. food cost: $${plan.estimatedTotalCost}
         </div>
       `;
       groceryCard.appendChild(groceryHeader);
@@ -1358,16 +1862,21 @@
         const row = document.createElement("div");
         row.className = "grocery-item";
 
-        const name = document.createElement("span");
+        const name = document.createElement("div");
         name.className = "grocery-name";
         name.textContent = item.name;
 
-        const uses = document.createElement("span");
+        const uses = document.createElement("div");
         uses.className = "grocery-uses";
-        uses.textContent = `${item.uses}x • ~$${roundTo(item.estCost)}`;
+        uses.textContent = `${item.uses}x • approx. $${roundTo(item.estCost)} • ${item.priceBand}`;
+
+        const store = document.createElement("div");
+        store.className = "grocery-store-tag";
+        store.textContent = `Best at: ${item.storeLabel}`;
 
         row.appendChild(name);
         row.appendChild(uses);
+        row.appendChild(store);
         groceryList.appendChild(row);
       });
 
