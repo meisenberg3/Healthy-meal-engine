@@ -11,8 +11,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- html2pdf -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-YcsIPGjU3JQ0Q7xvKqg5G7y1H4F9qrP1IdLxgIh1R7P+KQ+V7t4P7CEVvt8iDSHPsuacF6nwLxgWZlQ+8N0FQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- html2pdf (no integrity/crossorigin so it reliably loads everywhere) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     :root {
@@ -458,6 +458,13 @@
       font-size: 16px;
     }
 
+    .btn-secondary[disabled],
+    .btn-primary[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
     /* SUMMARY / PLAN */
 
     .heads-up {
@@ -477,6 +484,7 @@
       border: 1px solid var(--border-subtle);
       box-shadow: var(--shadow-light);
       padding: 16px 14px 14px;
+      display: none;
     }
 
     @media (min-width: 768px) {
@@ -698,12 +706,11 @@
       pointer-events: auto;
     }
 
-    /* PDF template hidden */
+    /* PDF TEMPLATE hidden container */
     #pdf-template {
       display: none;
     }
 
-    /* Page max-width helper for very small screens */
     @media (max-width: 400px) {
       .app-shell {
         border-radius: 30px;
@@ -832,7 +839,8 @@
           </div>
           <div>
             <label>Hard no ingredients</label>
-            <input id="hardNo" type="text" class="input-shell-input" placeholder='Comma-separated. e.g. "peanut butter, tuna, mushrooms".' style="width:100%;border-radius:999px;border:1px solid var(--border-subtle);padding:8px 12px;font-size:13px;background:#f9fafb;border-radius:999px;" />
+            <input id="hardNo" type="text" placeholder='Comma-separated. e.g. "peanut butter, tuna, mushrooms".'
+                   style="width:100%;border-radius:999px;border:1px solid var(--border-subtle);padding:8px 12px;font-size:13px;background:#f9fafb;" />
             <p class="hint-text">We’ll avoid these entirely.</p>
           </div>
         </div>
@@ -849,7 +857,7 @@
           </button>
           <button class="btn-secondary" id="pdfBtn" disabled>
             <span class="btn-icon">📄</span>
-            <span>Download plan as PDF</span>
+            <span id="pdfBtnLabel">Download plan as PDF</span>
           </button>
         </div>
 
@@ -858,7 +866,7 @@
         </div>
 
         <!-- PLAN OUTPUT -->
-        <section id="planOutput" class="plan-card" style="display:none;">
+        <section id="planOutput" class="plan-card">
           <div class="plan-header-row">
             <h3>Your Weekly Plan</h3>
             <div class="bubble-summary" id="budgetBubble">
@@ -876,22 +884,23 @@
               <span id="grocerySummary">39 unique items · Est. food cost: $46.8 (before tax)</span>
             </div>
             <div id="groceryList"></div>
-            <p class="copy-note">Tap “Download plan as PDF” for a clean version you can save or print, or long-press → copy to paste into Notes or your grocery app.</p>
+            <p class="copy-note">
+              Tap “Download plan as PDF” for a clean version you can save or print, or long-press → copy to paste into Notes or your grocery app.
+            </p>
           </div>
         </section>
       </section>
     </div>
   </div>
 
-  <!-- Hidden container for PDF content -->
+  <!-- Hidden container for PDF HTML -->
   <div id="pdf-template"></div>
 
   <div class="copy-toast" id="toast">Copied!</div>
 
   <script>
-    // ---------------------------
-    // DATA MODEL
-    // ---------------------------
+    let pdfReady = typeof html2pdf !== "undefined";
+
     const ingredientsCatalog = {
       "milk_or_water": { name: "Milk or water", category: "Fridge & basics", baseCost: 3.0, store: "Any grocery / big-box" },
       "water": { name: "Water", category: "Fridge & basics", baseCost: 3.0, store: "Any grocery store / big-box" },
@@ -942,11 +951,10 @@
           rolled_oats: 0.10,
           chia_seeds: 0.08,
           bananas: 0.15,
-          cinnamon: 0,
           oat_milk: 0.10
         },
         steps: [
-          "Add oats, chia seeds, and cinnamon to a jar or container.",
+          "Add oats, chia seeds, and cinnamon (optional) to a jar or container.",
           "Pour in enough milk to fully cover the oats and stir.",
           "Refrigerate overnight; add sliced banana in the morning."
         ]
@@ -1153,12 +1161,7 @@
     ];
 
     const daysOfWeek = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"];
-
     let currentPlan = null;
-
-    // ---------------------------
-    // HELPERS
-    // ---------------------------
 
     function clamp(value, min, max) {
       return Math.min(max, Math.max(min, value));
@@ -1182,10 +1185,6 @@
       setTimeout(() => t.classList.remove("show"), 1700);
     }
 
-    // ---------------------------
-    // PLAN BUILDING
-    // ---------------------------
-
     function buildPlan() {
       const mode = document
         .querySelector(".pill-toggle.active")
@@ -1201,12 +1200,9 @@
         .filter(Boolean);
       const constraints = document.getElementById("constraints").value.trim();
 
-      // Filter meals for eating style (simple: nothing with tuna if pescatarian/veg, no chicken for veg, etc.)
       let mealPool = mealsLibrary.slice();
-      if (eatingStyle === "no-pork") {
-        // nothing in library right now, placeholder for later
-      } else if (eatingStyle === "pescatarian") {
-        mealPool = mealPool.filter((m) => !m.id.includes("chicken_thighs"));
+      if (eatingStyle === "pescatarian") {
+        mealPool = mealPool.filter((m) => !m.id.includes("chicken"));
       } else if (eatingStyle === "vegetarian") {
         mealPool = mealPool.filter(
           (m) =>
@@ -1217,7 +1213,6 @@
         );
       }
 
-      // Hard-no filter (rough text match)
       if (hardNos.length) {
         mealPool = mealPool.filter((meal) => {
           const lowerName = meal.name.toLowerCase();
@@ -1225,7 +1220,6 @@
         });
       }
 
-      // Basic rotation: use first N meals by type
       const breakfasts = mealPool.filter((m) => m.type === "Breakfast");
       const lunches = mealPool.filter((m) => m.type === "Lunch");
       const dinners = mealPool.filter((m) => m.type === "Dinner");
@@ -1250,7 +1244,6 @@
           beverage: pick(beverages, i)
         };
 
-        // accumulate ingredients
         Object.values(dayMeals).forEach((meal) => {
           if (!meal || !meal.ingredients) return;
           Object.entries(meal.ingredients).forEach(([key, val]) => {
@@ -1259,7 +1252,6 @@
           });
         });
 
-        // estimate daily cost from meal approx costs
         let dailyCost = 0;
         Object.values(dayMeals).forEach((meal) => {
           if (!meal) return;
@@ -1273,17 +1265,15 @@
         });
       }
 
-      // Estimate weekly cost using ingredient totals & baseCost
       let estimatedCost = 0;
       Object.entries(ingredientTotals).forEach(([id, uses]) => {
         const ing = ingredientsCatalog[id];
         if (!ing) return;
-        const intensity = uses; // uses already in "fraction of package"
+        const intensity = uses;
         const multiplier = clamp(intensity, 0.3, 1.2);
         estimatedCost += ing.baseCost * multiplier;
       });
 
-      // Make cost react to budget a bit: clamp to 60–100% of budget
       const minCost = budget * 0.65;
       const maxCost = budget * 0.95;
       estimatedCost = clamp(estimatedCost, minCost, maxCost);
@@ -1294,10 +1284,10 @@
           ? "Busy Worker — prioritizing quick-prep or ready-to-eat meals."
           : "Budget-First — nudging toward cheaper ingredients while staying reasonable.";
 
-      // Build grocery list view data: transform to use labels and budget ranges
       const groceryEntries = Object.entries(ingredientTotals).map(([id, uses]) => {
         const i = ingredientsCatalog[id];
         const label = getUseLabel(uses);
+        const usesRounded = uses.toFixed(1);
         const cost = i.baseCost;
         let range = `$${Math.round(cost - 1)}–$${Math.round(cost + 1)}`;
         if (cost <= 3) range = "$2–$4";
@@ -1308,6 +1298,7 @@
           name: i.name,
           category: i.category,
           uses,
+          usesRounded,
           useLabel: label,
           budgetRange: range,
           store: i.store
@@ -1331,10 +1322,6 @@
 
       renderPlan();
     }
-
-    // ---------------------------
-    // RENDER PLAN TO UI
-    // ---------------------------
 
     function renderPlan() {
       if (!currentPlan) return;
@@ -1410,7 +1397,6 @@
         dayGrid.appendChild(col);
       });
 
-      // Grocery list
       const grocerySummary = document.getElementById("grocerySummary");
       grocerySummary.textContent = `${groceryEntries.length} unique items · Est. food cost: ${formatCurrency(
         estimatedCost
@@ -1437,19 +1423,15 @@
         row.className = "grocery-item";
         row.innerHTML = `
           <span class="grocery-item-name">${item.name}</span>
-          <span class="grocery-item-meta"> — ${item.useLabel.toLowerCase()}, budget: ${
-          item.budgetRange
-        } • ${item.store}</span>
+          <span class="grocery-item-meta">
+            — ~${item.usesRounded} uses this week, budget: ${item.budgetRange} • ${item.store}
+          </span>
         `;
         groceryDiv.appendChild(row);
       });
 
       document.getElementById("pdfBtn").disabled = false;
     }
-
-    // ---------------------------
-    // PDF GENERATION
-    // ---------------------------
 
     function buildPdfHtml() {
       if (!currentPlan) return "";
@@ -1472,12 +1454,11 @@
           ? `About $${diffAbs} under budget (buffer for tax & price swings).`
           : `About $${diffAbs} over budget — consider trimming snacks or portions.`;
 
-      const metaLine = `${diffText} Focus: ${
-        mode === "busy" ? "Busy Worker" : "Budget-First"
-      }. Eating style: ${eatingStyle.replace("-", " ")}.`;
+      const modeLabel = mode === "busy" ? "Busy Worker" : "Budget-First";
 
+      const metaLine = `${diffText} Focus: ${modeLabel}. Eating style: ${eatingStyle.replace("-", " ")}.`;
       const constraintLine = constraints
-        ? `<p style="font-size:11px;margin:2px 0 10px;"><strong>Special notes:</strong> ${constraints}</p>`
+        ? `<p style="font-size:11px;margin:4px 0 10px;"><strong>Special notes:</strong> ${constraints}</p>`
         : "";
 
       const daySections = daysPlan
@@ -1496,7 +1477,7 @@
               .map((s) => `<li>${s}</li>`)
               .join("");
             mealLines.push(`
-              <div style="margin-bottom:8px;">
+              <div style="margin-bottom:8px;padding:6px 8px;border-radius:8px;border:1px solid #e5e7eb;background:#ffffff;">
                 <div style="font-size:11px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">${label}</div>
                 <div style="font-size:12px;font-weight:600;margin:1px 0 2px;">${meal.name}</div>
                 <div style="font-size:11px;color:#6b7280;margin-bottom:2px;">${meal.prepMinutes} min • ~${formatCurrency(
@@ -1507,8 +1488,8 @@
             `);
           });
           return `
-            <div style="margin-bottom:12px;padding:8px 10px;border-radius:10px;border:1px solid #e5e7eb;background:#f9fafb;">
-              <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:2px;">
+            <div style="page-break-inside:avoid;margin-bottom:12px;padding:8px 10px;border-radius:10px;border:1px solid #e5e7eb;background:#f9fafb;">
+              <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:4px;">
                 <span>${day.label}</span>
                 <span>Est. daily cost: ${formatCurrency(day.cost)}</span>
               </div>
@@ -1518,7 +1499,6 @@
         })
         .join("");
 
-      // Grocery list grouped by category
       let currentCategory = null;
       const groceryLines = groceryEntries
         .map((item) => {
@@ -1529,60 +1509,84 @@
           }
           return `
             ${catHeaderHtml}
-            <div style="font-size:11px;margin-bottom:2px;">
+            <div style="font-size:11px;margin-bottom:3px;">
               <strong>${item.name}</strong>
-              <span> — ${item.useLabel.toLowerCase()}, budget: ${item.budgetRange} • ${item.store}</span>
+              <span> — ~${item.usesRounded} uses this week, budget: ${item.budgetRange} • ${item.store}</span>
             </div>
           `;
         })
         .join("");
 
+      // COVER + OVERVIEW + DAILY + GROCERY LIST
       return `
         <div style="font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:12px;color:#111827;padding:10px;">
-          <h1 style="font-size:18px;margin:0 0 2px;">Healthy Meal Engine</h1>
-          <p style="font-size:12px;margin:0 0 8px;">Weekly Grocery Plan · Personalized summary + grocery list</p>
-          <p style="font-size:11px;margin:0 0 4px;">
-            <strong>Total budget:</strong> $${budget.toFixed(
-              0
-            )} · <strong>Estimated food cost:</strong> ${formatCurrency(
-        estimatedCost
-      )} · <strong>Coverage:</strong> ${days} days
-          </p>
-          <p style="font-size:11px;margin:0 0 6px;">${metaLine}</p>
-          ${constraintLine}
+          <!-- COVER SECTION -->
+          <section style="page-break-after:always;">
+            <div style="display:flex;gap:12px;align-items:stretch;">
+              <div style="flex:1.4;">
+                <h1 style="font-size:20px;margin:0 0 4px;color:#065f46;">Your Personalized Weekly Healthy Meal Plan</h1>
+                <p style="font-size:11px;margin:0 0 10px;color:#4b5563;">
+                  Built to match your budget, energy, and eating style. Print this or keep it on your phone for the week.
+                </p>
+                <div style="font-size:11px;margin:6px 0 4px;padding:8px 10px;border-radius:10px;background:#ecfdf5;border:1px solid #bbf7d0;">
+                  <div><strong>Total budget:</strong> $${budget.toFixed(0)}</div>
+                  <div><strong>Estimated food cost:</strong> ${formatCurrency(estimatedCost)} (before tax)</div>
+                  <div><strong>Coverage:</strong> ${days} days · <strong>Focus:</strong> ${modeLabel}</div>
+                  <div><strong>Eating style:</strong> ${eatingStyle.replace("-", " ")}</div>
+                </div>
+                <p style="font-size:11px;margin:6px 0 4px;color:#4b5563;">${metaLine}</p>
+                ${constraintLine}
+                <p style="font-size:10px;margin:10px 0 0;color:#6b7280;">
+                  Generated with Healthy Meal Engine. This is not a medical or nutrition prescription — just a practical, budget-aware planning guide.
+                </p>
+              </div>
+              <div style="flex:1.2;display:grid;grid-template-columns:2fr 1.5fr;gap:6px;">
+                <!-- Collage layout A: 2 small left, 1 tall right -->
+                <div style="grid-row:1 / span 2;border-radius:14px;overflow:hidden;background:url('https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800') center/cover no-repeat;"></div>
+                <div style="border-radius:14px;overflow:hidden;background:url('https://images.pexels.com/photos/1813504/pexels-photo-1813504.jpeg?auto=compress&cs=tinysrgb&w=800') center/cover no-repeat;"></div>
+                <div style="border-radius:14px;overflow:hidden;background:url('https://images.pexels.com/photos/1639562/pexels-photo-1639562.jpeg?auto=compress&cs=tinysrgb&w=800') center/cover no-repeat;"></div>
+              </div>
+            </div>
+          </section>
 
-          <hr style="border:none;border-top:1px solid #e5e7eb;margin:10px 0;" />
+          <!-- WEEK OVERVIEW + DAILY PLAN -->
+          <section>
+            <h2 style="font-size:14px;margin:0 0 4px;color:#047857;">Week overview</h2>
+            <p style="font-size:11px;margin:0 0 8px;color:#4b5563;">
+              Each day includes a simple structure: breakfast, lunch, dinner, snack, and hydration. Use this as a guide, not a rigid rulebook.
+            </p>
+            ${daySections}
+          </section>
 
-          <h2 style="font-size:14px;margin:0 0 4px;">Daily meal plan</h2>
-          <p style="font-size:11px;margin:0 0 8px;">Each day includes breakfast, lunch, dinner, snack, and beverages with rough prep time and cost estimates.</p>
-          ${daySections}
-
-          <hr style="border:none;border-top:1px solid #e5e7eb;margin:10px 0;" />
-
-          <h2 style="font-size:14px;margin:0 0 4px;">Consolidated grocery list</h2>
-          <p style="font-size:11px;margin:0 0 6px;">
-            This list is grouped by section so you can move quickly through the store.
-            Prices assume discount-grocer style stores; your local store may vary.
-          </p>
-          ${groceryLines}
-
-          <p style="font-size:10px;margin:10px 0 0;color:#6b7280;">
-            Healthy Meal Engine · v1.5 · Prices are rough estimates based on national discount-grocer averages.
-            Re-run this plan whenever your budget, schedule, or preferences change.
-          </p>
+          <section style="page-break-before:always;">
+            <h2 style="font-size:14px;margin:4px 0 4px;color:#047857;">Consolidated grocery list</h2>
+            <p style="font-size:11px;margin:0 0 6px;color:#4b5563;">
+              Grouped by section so you can move quickly through the store. Prices assume discount-grocer style stores; your local store may vary.
+            </p>
+            ${groceryLines}
+            <p style="font-size:10px;margin:10px 0 0;color:#6b7280;">
+              Healthy Meal Engine · v1.5 · Prices are rough estimates based on national discount-grocer averages.
+              Re-run this plan whenever your budget, schedule, or preferences change.
+            </p>
+          </section>
         </div>
       `;
     }
 
     function generatePdf() {
-      if (typeof html2pdf === "undefined") {
-        alert("PDF library is still loading. Please wait one more second and try again.");
+      if (!pdfReady || typeof html2pdf === "undefined") {
+        alert("PDF tools didn’t load correctly. Please refresh the page and try again.");
         return;
       }
       if (!currentPlan) {
         alert("Generate a meal plan first.");
         return;
       }
+
+      const pdfBtn = document.getElementById("pdfBtn");
+      const pdfBtnLabel = document.getElementById("pdfBtnLabel");
+      pdfBtn.disabled = true;
+      pdfBtnLabel.textContent = "Preparing PDF…";
 
       const pdfContainer = document.getElementById("pdf-template");
       pdfContainer.innerHTML = buildPdfHtml();
@@ -1596,14 +1600,26 @@
         pagebreak: { mode: ["css", "legacy"] }
       };
 
-      html2pdf().set(opt).from(pdfContainer).save();
+      html2pdf()
+        .set(opt)
+        .from(pdfContainer)
+        .save()
+        .then(() => {
+          pdfBtn.disabled = false;
+          pdfBtnLabel.textContent = "Download plan as PDF";
+        })
+        .catch(() => {
+          alert("Something went wrong while building the PDF. Please try again.");
+          pdfBtn.disabled = false;
+          pdfBtnLabel.textContent = "Download plan as PDF";
+        });
     }
 
-    // ---------------------------
-    // EVENT WIRING
-    // ---------------------------
-
     document.addEventListener("DOMContentLoaded", () => {
+      if (typeof html2pdf !== "undefined") {
+        pdfReady = true;
+      }
+
       const focusToggle = document.getElementById("focusToggle");
       const focusDescription = document.getElementById("focusDescription");
 
